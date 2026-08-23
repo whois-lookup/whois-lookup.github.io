@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Dynamic SEO Meta Tags -->
+    <title id="meta-title">Whois Lookup - Free Domain WHOIS Search & DNS Records</title>
+    <meta id="meta-desc" name="description" content="Instant Whois Lookup tool. Search domain registration details, expiration dates, live DNS records, registrar info, and ownership data.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" id="canonical-url" href="https://yourusername.github.io/">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Whois Lookup">
+    <meta property="og:title" id="og-title" content="Whois Lookup - Professional WHOIS & DNS Tool">
+    <meta property="og:description" id="og-desc" content="Comprehensive WHOIS database search, live DNS records, and domain intelligence.">
+
+    <!-- Tailwind CSS & FontAwesome Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Dynamic Schema Container (JSON-LD) -->
+    <script type="application/ld+json" id="schema-data"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#eff6ff', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#1e3a8a' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen font-sans antialiased">
+
+    <!-- Top Navigation -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="/" onclick="navigateHome(event)" class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-md shadow-brand-500/20">
+                    <i class="fa-solid fa-magnifying-glass-chart"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-extrabold tracking-tight text-slate-900 leading-none">Whois <span class="text-brand-600">Lookup</span></span>
+                    <span class="text-[10px] font-semibold text-slate-400 tracking-wider uppercase mt-0.5">Domain Intelligence</span>
+                </div>
+            </a>
+
+            <!-- Quick Nav Search (Visible when viewing a domain) -->
+            <div id="nav-search-bar" class="hidden md:flex items-center w-80 relative">
+                <input type="text" id="nav-search-input" placeholder="Search another domain..." class="w-full pl-9 pr-20 py-2 text-sm bg-slate-100 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 text-slate-400 text-xs"></i>
+                <button onclick="handleSearch('nav-search-input')" class="absolute right-1 px-3 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-md transition">Lookup</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN VIEW AREA -->
+    <main class="flex-grow">
+
+        <!-- 1. HOMEPAGE VIEW -->
+        <section id="home-view" class="py-16 px-4 max-w-5xl mx-auto">
+            <div class="text-center mb-10">
+                <span class="bg-brand-50 text-brand-700 text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-brand-200 inline-block mb-3">100% Free & Real-Time RDAP Database</span>
+                <h1 class="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight leading-tight">WHOIS Lookup Tool & <br><span class="text-brand-600">DNS Intelligence</span></h1>
+                <p class="text-slate-600 text-base sm:text-lg mt-4 max-w-2xl mx-auto">Instant access to domain registration records, owner details, expiration timeline, and live DNS resolution.</p>
+            </div>
+
+            <!-- Main Search Box -->
+            <div class="bg-white p-3 rounded-2xl shadow-xl border border-slate-200 flex flex-col sm:flex-row gap-2 max-w-3xl mx-auto mb-16">
+                <div class="relative flex-grow">
+                    <i class="fa-solid fa-globe absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                    <input type="text" id="main-search-input" placeholder="Enter domain name (e.g. google.com, github.com)" class="w-full pl-12 pr-4 py-4 rounded-xl text-slate-800 text-base sm:text-lg focus:outline-none">
+                </div>
+                <button onclick="handleSearch('main-search-input')" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-8 py-4 rounded-xl transition shadow-lg shadow-brand-600/30 flex items-center justify-center gap-2">
+                    <span>Whois Lookup</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- Core Features -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-blue-50 text-brand-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-id-card"></i></div>
+                    <h3 class="font-bold text-slate-900 mb-1.5 text-base">Registrar Information</h3>
+                    <p class="text-slate-600 text-xs leading-relaxed">Identify domain registrars, IANA IDs, abuse contact emails, and expiration dates instantly.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-network-wired"></i></div>
+                    <h3 class="font-bold text-slate-900 mb-1.5 text-base">Live DNS Records</h3>
+                    <p class="text-slate-600 text-xs leading-relaxed">Query live global DNS propagation for A, AAAA, MX, NS, and TXT records via Cloudflare DoH.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-arrows-split-up-and-left"></i></div>
+                    <h3 class="font-bold text-slate-900 mb-1.5 text-base">Related Domain Names</h3>
+                    <p class="text-slate-600 text-xs leading-relaxed">Explore available domain brand extensions and alternative suggestions on the fly.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 2. DOMAIN RESULT VIEW -->
+        <section id="result-view" class="hidden py-8 px-4 max-w-7xl mx-auto">
+            
+            <!-- Loading Indicator -->
+            <div id="result-loading" class="text-center py-20">
+                <i class="fa-solid fa-circle-notch fa-spin text-4xl text-brand-600 mb-4"></i>
+                <h2 class="text-xl font-bold text-slate-800">Searching Whois Database...</h2>
+                <p class="text-slate-500 text-sm">Querying official RDAP and DNS servers</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="result-error" class="hidden max-w-2xl mx-auto text-center py-16 bg-white rounded-2xl border border-rose-200 p-8 shadow-sm">
+                <i class="fa-solid fa-triangle-exclamation text-rose-500 text-5xl mb-4"></i>
+                <h2 class="text-2xl font-bold text-slate-800 mb-2">Record Unavailable</h2>
+                <p id="error-message" class="text-slate-600 mb-6">Could not fetch WHOIS records for this domain.</p>
+                <button onclick="navigateHome()" class="px-6 py-2.5 bg-brand-600 text-white rounded-xl font-medium hover:bg-brand-700 transition">Back to Whois Lookup</button>
+            </div>
+
+            <!-- Loaded Result Content -->
+            <div id="result-content" class="hidden space-y-6">
+
+                <!-- Header Bar -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-3">
+                            <h1 id="domain-name-header" class="text-3xl font-black text-slate-900">example.com</h1>
+                            <span id="badge-status" class="px-3 py-1 text-xs font-extrabold rounded-full bg-emerald-100 text-emerald-700">ACTIVE</span>
+                        </div>
+                        <p class="text-slate-500 text-xs mt-1">Verified via Official RDAP Protocol • Whois Lookup Engine</p>
+                    </div>
+
+                    <!-- Affiliate CTAs -->
+                    <div class="flex flex-wrap gap-2">
+                        <a id="buy-domain-cta" href="https://www.namecheap.com" target="_blank" rel="nofollow noopener" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition shadow-md shadow-emerald-600/20 flex items-center gap-2">
+                            <i class="fa-solid fa-cart-shopping"></i> Register Domain
+                        </a>
+                        <a id="history-cta" href="https://web.archive.org" target="_blank" rel="nofollow noopener" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition flex items-center gap-2">
+                            <i class="fa-solid fa-clock-rotate-left"></i> Wayback History
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                    <!-- Left: Details (2 Cols) -->
+                    <div class="lg:col-span-2 space-y-6">
+
+                        <!-- 1. Domain Information -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center gap-2.5 border-b border-slate-100 pb-4 mb-4">
+                                <i class="fa-solid fa-circle-info text-brand-600 text-lg"></i>
+                                <h2 class="text-base font-bold text-slate-900">Domain Information</h2>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span class="text-slate-400 block text-xs uppercase font-semibold">Registered On</span>
+                                    <span id="info-created" class="font-semibold text-slate-800">-</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-xs uppercase font-semibold">Expires On</span>
+                                    <span id="info-expires" class="font-semibold text-slate-800">-</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-xs uppercase font-semibold">Last Updated</span>
+                                    <span id="info-updated" class="font-semibold text-slate-800">-</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-xs uppercase font-semibold">Domain Age</span>
+                                    <span id="info-age" class="font-semibold text-slate-800">-</span>
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <span class="text-slate-400 block text-xs uppercase font-semibold mb-1.5">Status Codes</span>
+                                    <div id="info-status-list" class="flex flex-wrap gap-1.5"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Registrar Information -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center gap-2.5 border-b border-slate-100 pb-4 mb-4">
+                                <i class="fa-solid fa-building text-brand-600 text-lg"></i>
+                                <h2 class="text-base font-bold text-slate-900">Registrar Information</h2>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span class="text-slate-400 block text-xs uppercase font-semibold">Registrar Name</span>
+                                    <span id="reg-name" class="font-semibold text-slate-800">-</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-xs uppercase font-semibold">IANA ID</span>
+                                    <span id="reg-iana" class="font-semibold text-slate-800">-</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-xs uppercase font-semibold">Abuse Contact Email</span>
+                                    <span id="reg-email" class="font-semibold text-slate-800 break-all">-</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-xs uppercase font-semibold">Abuse Contact Phone</span>
+                                    <span id="reg-phone" class="font-semibold text-slate-800">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Registrant Contact -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center gap-2.5 border-b border-slate-100 pb-4 mb-4">
+                                <i class="fa-solid fa-user-shield text-brand-600 text-lg"></i>
+                                <h2 class="text-base font-bold text-slate-900">Registrant Contact</h2>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span class="text-slate-400 block text-xs uppercase font-semibold">Organization</span>
+                                    <span id="contact-org" class="font-semibold text-slate-800">-</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400 block text-xs uppercase font-semibold">Country / Region</span>
+                                    <span id="contact-country" class="font-semibold text-slate-800">-</span>
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900 flex items-start gap-2.5">
+                                        <i class="fa-solid fa-shield-halved text-amber-600 mt-0.5"></i>
+                                        <span>Personal contact details may be redacted by privacy protection services in compliance with ICANN GDPR policies.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. DNS Records -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+                                <div class="flex items-center gap-2.5">
+                                    <i class="fa-solid fa-server text-brand-600 text-lg"></i>
+                                    <h2 class="text-base font-bold text-slate-900">DNS Records (Live Cloudflare DoH)</h2>
+                                </div>
+                                <span class="text-xs font-mono bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-bold">ANY</span>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs">
+                                    <thead>
+                                        <tr class="bg-slate-50 text-slate-400 uppercase font-semibold">
+                                            <th class="py-2.5 px-3">Type</th>
+                                            <th class="py-2.5 px-3">Value / Host</th>
+                                            <th class="py-2.5 px-3">TTL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dns-table-body" class="divide-y divide-slate-100 font-mono">
+                                        <tr><td colspan="3" class="text-center py-4 text-slate-400">Loading DNS records...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Sidebar -->
+                    <div class="space-y-6">
+
+                        <!-- Nameservers Card -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <h3 class="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-diagram-project text-brand-600"></i> Name Servers
+                            </h3>
+                            <ul id="nameservers-list" class="space-y-2 text-xs font-mono text-slate-600">
+                                <li>Loading...</li>
+                            </ul>
+                        </div>
+
+                        <!-- 5. Related Domain Names -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <h3 class="text-sm font-bold text-slate-900 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-arrows-split-up-and-left text-brand-600"></i> Related Domain Names
+                            </h3>
+                            <p class="text-[11px] text-slate-400 mb-3">Popular extensions and alternative variants.</p>
+                            
+                            <div id="related-domains-list" class="space-y-2">
+                                <!-- Dynamically generated -->
+                            </div>
+                        </div>
+
+                        <!-- Monetization Box -->
+                        <div class="bg-gradient-to-br from-brand-600 to-indigo-900 p-6 rounded-2xl text-white shadow-lg">
+                            <span class="text-[10px] font-extrabold uppercase bg-white/20 px-2.5 py-1 rounded-full tracking-wider">Recommended Host</span>
+                            <h4 class="text-base font-bold mt-3 mb-1">Fast Cloud Hosting</h4>
+                            <p class="text-xs text-blue-100 mb-4 leading-relaxed">High performance NVMe SSD hosting with free SSL and domain transfer.</p>
+                            <a href="https://www.namecheap.com" target="_blank" rel="nofollow noopener" class="block text-center py-2.5 px-4 bg-white text-brand-700 rounded-xl font-bold text-xs hover:bg-blue-50 transition shadow-sm">
+                                Claim 70% Discount Now
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-16 py-8 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="font-medium">© <span id="year"></span> <strong class="text-slate-700">Whois Lookup</strong>. All domain registration data is publicly sourced via RDAP protocols.</p>
+        </div>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // 1. ROUTER
+        window.addEventListener('DOMContentLoaded', () => handleRouting());
+        window.addEventListener('popstate', () => handleRouting());
+
+        function handleRouting() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const queryDomain = urlParams.get('domain');
+
+            const pathParts = window.location.pathname.split('/').filter(Boolean);
+            let pathDomain = null;
+            if (pathParts.length > 0) {
+                const last = pathParts[pathParts.length - 1];
+                if (last.includes('.')) pathDomain = last;
+            }
+
+            const targetDomain = queryDomain || pathDomain;
+
+            if (targetDomain) {
+                showResultView();
+                fetchDomainData(targetDomain.toLowerCase().trim());
+            } else {
+                showHomeView();
+            }
+        }
+
+        function handleSearch(inputId) {
+            let domain = document.getElementById(inputId).value.trim().toLowerCase();
+            domain = domain.replace(/^(https?:\/\/)?(www\.)?/, '').split('/')[0];
+            
+            if (domain && domain.includes('.')) {
+                const newUrl = `${window.location.origin}${window.location.pathname}?domain=${encodeURIComponent(domain)}`;
+                window.history.pushState({ domain }, '', newUrl);
+                showResultView();
+                fetchDomainData(domain);
+            } else {
+                alert('Please enter a valid domain name (e.g. example.com)');
+            }
+        }
+
+        function navigateHome(e) {
+            if (e) e.preventDefault();
+            window.history.pushState({}, '', window.location.pathname.split('?')[0]);
+            showHomeView();
+        }
+
+        function showHomeView() {
+            document.getElementById('home-view').classList.remove('hidden');
+            document.getElementById('result-view').classList.add('hidden');
+            document.getElementById('nav-search-bar').classList.add('hidden');
+            
+            // SEO Reset
+            document.title = "Whois Lookup - Free Domain WHOIS Search & DNS Records";
+            document.getElementById('meta-desc').setAttribute('content', 'Instant Whois Lookup tool. Search domain registration details, expiration dates, live DNS records, and registrar info.');
+            updateSiteSchema();
+        }
+
+        function showResultView() {
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('result-view').classList.remove('hidden');
+            document.getElementById('nav-search-bar').classList.remove('hidden');
+            document.getElementById('result-loading').classList.remove('hidden');
+            document.getElementById('result-content').classList.add('hidden');
+            document.getElementById('result-error').classList.add('hidden');
+        }
+
+        // 2. FETCH WHOIS & DNS
+        async function fetchDomainData(domain) {
+            updateSEO(domain);
+
+            try {
+                const [rdapRes] = await Promise.all([
+                    fetch(`https://rdap.org/domain/${domain}`).catch(() => null),
+                    fetchDNS(domain)
+                ]);
+
+                if (!rdapRes || !rdapRes.ok) {
+                    throw new Error('WHOIS record not found or registry unavailable.');
+                }
+
+                const data = await rdapRes.json();
+                renderWhoisUI(domain, data);
+                generateRelatedDomains(domain);
+
+                document.getElementById('result-loading').classList.add('hidden');
+                document.getElementById('result-content').classList.remove('hidden');
+
+            } catch (err) {
+                document.getElementById('result-loading').classList.add('hidden');
+                document.getElementById('result-error').classList.remove('hidden');
+                document.getElementById('error-message').innerText = err.message || 'Unable to load domain details.';
+            }
+        }
+
+        // 3. RENDER UI
+        function renderWhoisUI(domain, data) {
+            document.getElementById('domain-name-header').textContent = domain;
+            
+            const regEvent = data.events?.find(e => e.eventAction === 'registration')?.eventDate;
+            const expEvent = data.events?.find(e => e.eventAction === 'expiration')?.eventDate;
+            const updEvent = data.events?.find(e => e.eventAction === 'last changed' || e.eventAction === 'last update')?.eventDate;
+
+            document.getElementById('info-created').textContent = formatDate(regEvent);
+            document.getElementById('info-expires').textContent = formatDate(expEvent);
+            document.getElementById('info-updated').textContent = formatDate(updEvent);
+            document.getElementById('info-age').textContent = calculateAge(regEvent);
+
+            const statusContainer = document.getElementById('info-status-list');
+            statusContainer.innerHTML = '';
+            (data.status || ['Active']).forEach(st => {
+                const badge = document.createElement('span');
+                badge.className = 'px-2 py-0.5 bg-slate-100 border border-slate-200 text-slate-700 text-xs font-mono rounded';
+                badge.textContent = st;
+                statusContainer.appendChild(badge);
+            });
+
+            // Registrar Data
+            let regName = 'Not Disclosed';
+            let regIana = 'N/A';
+            let regEmail = 'N/A';
+            let regPhone = 'N/A';
+
+            if (data.entities) {
+                data.entities.forEach(ent => {
+                    if (ent.roles?.includes('registrar')) {
+                        const vcard = ent.vcardArray?.[1];
+                        if (vcard) regName = vcard.find(v => v[0] === 'fn')?.[3] || regName;
+                        if (ent.publicIds) regIana = ent.publicIds.find(id => id.type === 'IANA Registrar ID')?.identifier || regIana;
+                    }
+                    if (ent.roles?.includes('abuse')) {
+                        const vcard = ent.vcardArray?.[1];
+                        if (vcard) {
+                            regEmail = vcard.find(v => v[0] === 'email')?.[3] || regEmail;
+                            regPhone = vcard.find(v => v[0] === 'tel')?.[3] || regPhone;
+                        }
+                    }
+                });
+            }
+            document.getElementById('reg-name').textContent = regName;
+            document.getElementById('reg-iana').textContent = regIana;
+            document.getElementById('reg-email').textContent = regEmail;
+            document.getElementById('reg-phone').textContent = regPhone;
+
+            // Registrant
+            let orgName = 'Privacy Protected / Redacted';
+            let country = 'N/A';
+            const registrant = data.entities?.find(e => e.roles?.includes('registrant'));
+            if (registrant && registrant.vcardArray) {
+                const vcard = registrant.vcardArray[1];
+                orgName = vcard.find(v => v[0] === 'org')?.[3] || vcard.find(v => v[0] === 'fn')?.[3] || orgName;
+                const adr = vcard.find(v => v[0] === 'adr')?.[3];
+                if (adr && Array.isArray(adr)) country = adr[6] || adr[4] || 'N/A';
+            }
+            document.getElementById('contact-org').textContent = orgName;
+            document.getElementById('contact-country').textContent = country;
+
+            // Nameservers
+            const nsContainer = document.getElementById('nameservers-list');
+            nsContainer.innerHTML = '';
+            if (data.nameservers && data.nameservers.length > 0) {
+                data.nameservers.forEach(ns => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-center gap-2';
+                    li.innerHTML = `<i class="fa-solid fa-caret-right text-brand-500"></i> ${ns.ldhName.toLowerCase()}`;
+                    nsContainer.appendChild(li);
+                });
+            } else {
+                nsContainer.innerHTML = '<li class="text-slate-400">No nameservers listed</li>';
+            }
+
+            updateDomainSchema(domain, regName, regEvent, expEvent);
+        }
+
+        // 4. DNS LOOKUP
+        async function fetchDNS(domain) {
+            const tbody = document.getElementById('dns-table-body');
+            tbody.innerHTML = '';
+            const types = ['A', 'AAAA', 'MX', 'NS', 'TXT'];
+            try {
+                const responses = await Promise.all(
+                    types.map(t => fetch(`https://cloudflare-dns.com/dns-query?name=${domain}&type=${t}`, {
+                        headers: { 'accept': 'application/dns-json' }
+                    }).then(r => r.json()).catch(() => null))
+                );
+
+                let count = 0;
+                responses.forEach(res => {
+                    if (res && res.Answer) {
+                        res.Answer.forEach(ans => {
+                            count++;
+                            const typeName = types.find(t => getDnsTypeNum(t) === ans.type) || ans.type;
+                            const tr = document.createElement('tr');
+                            tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+                            tr.innerHTML = `
+                                <td class="py-2.5 px-3 font-bold text-brand-600">${typeName}</td>
+                                <td class="py-2.5 px-3 text-slate-700 break-all">${ans.data}</td>
+                                <td class="py-2.5 px-3 text-slate-400">${ans.TTL}s</td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    }
+                });
+
+                if (count === 0) tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-slate-400">No public DNS records resolved.</td></tr>';
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-rose-500">Failed to fetch DNS records.</td></tr>';
+            }
+        }
+
+        function getDnsTypeNum(type) {
+            const map = { 'A': 1, 'NS': 2, 'CNAME': 5, 'SOA': 6, 'PTR': 12, 'MX': 15, 'TXT': 16, 'AAAA': 28 };
+            return map[type] || 1;
+        }
+
+        // 5. RELATED DOMAINS
+        function generateRelatedDomains(domain) {
+            const list = document.getElementById('related-domains-list');
+            list.innerHTML = '';
+            const name = domain.split('.')[0];
+            const suggestions = [`${name}.org`, `${name}.net`, `${name}.io`, `${name}.ai`, `get${name}.com`];
+
+            suggestions.forEach(sug => {
+                if (sug !== domain) {
+                    const div = document.createElement('div');
+                    div.className = 'flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200 text-xs';
+                    div.innerHTML = `
+                        <span class="font-bold text-slate-700">${sug}</span>
+                        <a href="?domain=${sug}" class="text-brand-600 hover:text-brand-700 font-bold flex items-center gap-1">
+                            Whois <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </a>
+                    `;
+                    list.appendChild(div);
+                }
+            });
+        }
+
+        // 6. DYNAMIC SEO & SCHEMAS
+        function updateSEO(domain) {
+            const title = `${domain} Whois Lookup - Domain Registration & DNS Records`;
+            const desc = `Detailed Whois Lookup for ${domain}. View expiration timeline, owner contacts, nameservers, and live DNS entries.`;
+
+            document.title = title;
+            document.getElementById('meta-desc').setAttribute('content', desc);
+            document.getElementById('og-title').setAttribute('content', title);
+            document.getElementById('og-desc').setAttribute('content', desc);
+            document.getElementById('canonical-url').setAttribute('href', `${window.location.origin}/?domain=${domain}`);
+        }
+
+        function updateDomainSchema(domain, registrar, created, expires) {
+            const schema = {
+                "@context": "https://schema.org",
+                "@graph": [
+                    {
+                        "@type": "WebPage",
+                        "@id": `${window.location.origin}/?domain=${domain}`,
+                        "url": `${window.location.origin}/?domain=${domain}`,
+                        "name": `${domain} Whois Lookup & Intelligence`,
+                        "description": `Comprehensive WHOIS record for ${domain}`
+                    },
+                    {
+                        "@type": "Dataset",
+                        "name": `Whois Lookup Data for ${domain}`,
+                        "description": `Public registration records, registrar information, and DNS mappings for ${domain}`,
+                        "creator": {
+                            "@type": "Organization",
+                            "name": registrar || "Domain Registrar"
+                        },
+                        "temporalCoverage": `${created || ''}/${expires || ''}`
+                    }
+                ]
+            };
+            document.getElementById('schema-data').textContent = JSON.stringify(schema);
+        }
+
+        function updateSiteSchema() {
+            const schema = {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "Whois Lookup",
+                "url": window.location.origin,
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": `${window.location.origin}/?domain={search_term_string}`,
+                    "query-input": "required name=search_term_string"
+                }
+            };
+            document.getElementById('schema-data').textContent = JSON.stringify(schema);
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return 'N/A';
+            try { return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }); } 
+            catch { return dateStr; }
+        }
+
+        function calculateAge(dateStr) {
+            if (!dateStr) return 'N/A';
+            const diff = Date.now() - new Date(dateStr).getTime();
+            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+            return years > 0 ? `${years} Years old` : 'Less than 1 year';
+        }
+    </script>
+</body>
+</html>
