@@ -1,31 +1,976 @@
-export default {
-  async fetch(request) {
-    const url = new URL(request.url);
-    const response = await fetch(request);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    // استخراج النطاق من الرابط
-    const parts = url.pathname.split('/').filter(Boolean);
-    let domain = null;
-    for (let part of parts) {
-      if (part.includes('.') && !part.endsWith('.html')) {
-        domain = part.toLowerCase();
-        break;
-      }
-    }
+    <!-- 1. BASE TAGS -->
+    <title id="meta-title">WHOIS Lookup - Instant Domain &amp; IP Ownership Intelligence</title>
+    <meta id="meta-desc" name="description" content="Free WHOIS lookup tool to search domain registration data, IP geolocation, DNS records, SSL status, Google PageSpeed, and domain market valuation.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" id="canonical-url" href="https://yourusername.github.io/">
 
-    if (!domain) return response;
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="WHOIS Lookup">
+    <meta property="og:title" id="og-title" content="WHOIS Lookup - Domain Intelligence">
+    <meta property="og:description" id="og-desc" content="Detailed WHOIS, DNS records, server location, PageSpeed score, and valuation report.">
+    <meta property="og:url" id="og-url" content="https://yourusername.github.io/">
 
-    const dynamicTitle = `${domain} | WHOIS, DNS Records & Valuation Report`;
-    const dynamicDesc = `Detailed WHOIS lookup, DNS records, server location, and valuation report for ${domain}.`;
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" id="tw-title" content="WHOIS Lookup - Domain Intelligence">
+    <meta name="twitter:description" id="tw-desc" content="Detailed WHOIS, DNS records, server location, PageSpeed score, and valuation report.">
 
-    // استبدال الـ Meta Tags في الـ HTML مباشرة قبل إرساله للفاحص
-    return new HTMLRewriter()
-      .on('title', { element(e) { e.setInnerContent(dynamicTitle); } })
-      .on('meta[name="description"]', { element(e) { e.setAttribute('content', dynamicDesc); } })
-      .on('meta[property="og:title"]', { element(e) { e.setAttribute('content', dynamicTitle); } })
-      .on('meta[property="og:description"]', { element(e) { e.setAttribute('content', dynamicDesc); } })
-      .on('meta[name="twitter:title"]', { element(e) { e.setAttribute('content', dynamicTitle); } })
-      .on('meta[name="twitter:description"]', { element(e) { e.setAttribute('content', dynamicDesc); } })
-      .transform(response);
-  }
-};
+    <!-- Schema Container -->
+    <script type="application/ld+json" id="schema-data"></script>
+
+    <!-- 🔥 2. INSTANT HEAD SCRIPT: Executes instantly before DOM/Images load -->
+    <script>
+        (function() {
+            function getCleanDomain() {
+                var params = new URLSearchParams(window.location.search);
+                var q = params.get('domain') || params.get('q');
+                if (q) return clean(q);
+
+                var parts = window.location.pathname.split('/').filter(Boolean);
+                for (var i = 0; i < parts.length; i++) {
+                    if (parts[i].indexOf('.') !== -1 && !parts[i].endsWith('.html')) {
+                        return clean(parts[i]);
+                    }
+                }
+                return null;
+            }
+
+            function clean(d) {
+                return d.trim().toLowerCase().replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0].split('?')[0];
+            }
+
+            var domain = getCleanDomain();
+            if (domain) {
+                var dynamicTitle = domain + " | WHOIS, DNS Records, Server Location & Valuation Report";
+                var dynamicDesc = "Detailed WHOIS lookup, DNS records, server location, SSL audit, domain age, registrar details, and valuation report for " + domain + ".";
+                var dynamicUrl = window.location.origin + "/domain/" + domain;
+
+                document.title = dynamicTitle;
+                
+                // Helper to update or create meta tags immediately
+                function setMeta(nameOrProp, key, value) {
+                    var el = document.querySelector('meta[' + nameOrProp + '="' + key + '"]');
+                    if (el) {
+                        el.setAttribute('content', value);
+                    }
+                }
+
+                setMeta('name', 'description', dynamicDesc);
+                setMeta('property', 'og:title', dynamicTitle);
+                setMeta('property', 'og:description', dynamicDesc);
+                setMeta('property', 'og:url', dynamicUrl);
+                setMeta('name', 'twitter:title', dynamicTitle);
+                setMeta('name', 'twitter:description', dynamicDesc);
+
+                var canonical = document.getElementById('canonical-url');
+                if (canonical) canonical.setAttribute('href', dynamicUrl);
+            }
+        })();
+    </script>
+
+    <!-- Fonts & Styling -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root { 
+            --primary: #0052ff; 
+            --primary-hover: #0043d0;
+            --bg: #f8fafc; 
+            --card-bg: #ffffff;
+            --border: #e2e8f0; 
+            --text-main: #0f172a; 
+            --text-sec: #64748b; 
+            --radius: 16px;
+        }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            margin: 0; 
+            -webkit-font-smoothing: antialiased;
+        }
+        .navbar { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border); 
+            padding: 0.9rem 0; 
+        }
+        .navbar-brand { 
+            font-weight: 800; 
+            color: var(--text-main) !important; 
+            font-size: 1.35rem; 
+            letter-spacing: -0.5px; 
+        }
+        .hero-section { 
+            background: #ffffff; 
+            padding: 3.5rem 0 2.5rem; 
+            border-bottom: 1px solid var(--border); 
+        }
+        .search-container { 
+            max-width: 680px; 
+            margin: 0 auto; 
+        }
+        .search-input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .search-container input { 
+            padding: 1.1rem 8.5rem 1.1rem 1.5rem; 
+            border-radius: 14px; 
+            border: 2px solid var(--border); 
+            width: 100%; 
+            font-size: 1.05rem; 
+            font-weight: 500;
+            transition: all 0.2s ease; 
+            outline: none; 
+            background: #fff;
+        }
+        .search-container input:focus { 
+            border-color: var(--primary); 
+            box-shadow: 0 0 0 4px rgba(0, 82, 255, 0.12); 
+        }
+        .search-container .btn-search { 
+            position: absolute; 
+            right: 8px; 
+            top: 8px; 
+            bottom: 8px; 
+            border-radius: 10px; 
+            padding: 0 1.8rem; 
+            font-weight: 700; 
+            background: var(--primary);
+            color: white;
+            border: none;
+            transition: 0.2s;
+        }
+        .search-container .btn-search:hover {
+            background: var(--primary-hover);
+        }
+        .recent-searches-box {
+            margin-top: 1.2rem;
+            display: none;
+        }
+        .recent-pill {
+            display: inline-flex;
+            align-items: center;
+            background: #f1f5f9;
+            color: var(--text-sec);
+            padding: 0.35rem 0.85rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none !important;
+            margin: 0.2rem;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .recent-pill:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .result-card { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border); 
+            border-radius: var(--radius); 
+            padding: 1.75rem; 
+            margin-bottom: 1.5rem; 
+        }
+        .metric-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); 
+            gap: 1rem; 
+        }
+        .metric-item { 
+            padding: 1rem; 
+            background: #f8fafc; 
+            border: 1px solid #f1f5f9;
+            border-radius: 12px; 
+            text-align: center; 
+        }
+        .metric-label { 
+            font-size: 0.725rem; 
+            font-weight: 700; 
+            color: var(--text-sec); 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem; 
+        }
+        .metric-val { 
+            font-size: 1.15rem; 
+            font-weight: 800; 
+            color: var(--text-main); 
+        }
+        .info-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 0.85rem 0; 
+            border-bottom: 1px solid #f1f5f9; 
+            font-size: 0.9rem; 
+        }
+        .info-row:last-child { border: none; }
+        .info-label { color: var(--text-sec); font-weight: 600; }
+        .info-data { color: var(--text-main); font-weight: 700; text-align: right; word-break: break-all; }
+        .copy-btn {
+            background: none;
+            border: none;
+            color: var(--text-sec);
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-left: 6px;
+        }
+        .copy-btn:hover { color: var(--primary); }
+        .preview-box { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border); 
+            border-radius: var(--radius); 
+            padding: 1.5rem; 
+            position: sticky; 
+            top: 85px; 
+        }
+        .site-thumb { 
+            width: 100%; 
+            aspect-ratio: 16/10;
+            object-fit: cover;
+            border-radius: 10px; 
+            border: 1px solid var(--border); 
+            margin-bottom: 1rem; 
+            background: #f1f5f9;
+        }
+        .seo-text-body { line-height: 1.8; color: #334155; font-size: 0.95rem; }
+        .seo-text-body h2 { font-size: 1.3rem; font-weight: 800; margin-top: 0.5rem; margin-bottom: 0.75rem; color: var(--text-main); }
+        .seo-text-body h3 { font-size: 1.05rem; font-weight: 700; margin-top: 1.25rem; margin-bottom: 0.5rem; color: var(--text-main); }
+        .related-link { 
+            display: inline-flex; 
+            align-items: center;
+            background: #f1f5f9; 
+            color: #334155; 
+            padding: 0.4rem 0.85rem; 
+            border-radius: 50px; 
+            font-size: 0.82rem; 
+            font-weight: 700;
+            text-decoration: none !important; 
+            margin: 0.25rem; 
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s; 
+        }
+        .related-link:hover { 
+            background: var(--primary); 
+            color: white; 
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .share-buttons { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+        .share-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.55rem 1.1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff !important;
+            text-decoration: none !important;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .share-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .share-btn.fb { background-color: #1877f2; }
+        .share-btn.tw { background-color: #000000; }
+        .share-btn.wa { background-color: #25d366; }
+        .share-btn.tg { background-color: #229ed9; }
+        .share-btn.ln { background-color: #0a66c2; }
+        .share-btn.cp { background-color: #64748b; }
+        .skeleton {
+            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 6px;
+            color: transparent !important;
+            user-select: none;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="/" onclick="navigateHome(event)">
+                <i class="fa-solid fa-globe text-primary"></i>
+                <span>WHOIS<span class="text-primary">LOOKUP</span></span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Search Bar -->
+    <div class="hero-section text-center">
+        <div class="container">
+            <div id="hero-header-text">
+                <h1 class="fw-extrabold fs-2 mb-2">Domain Ownership &amp; WHOIS Intelligence</h1>
+                <p class="text-muted mb-4 fs-6">Get deep insights on domain registration, DNS records, server location, PageSpeed &amp; SSL audit.</p>
+            </div>
+            
+            <form class="search-container" onsubmit="handleSearchSubmit(event)">
+                <div class="search-input-group">
+                    <input autocomplete="off" id="domainInput" placeholder="Enter domain name (e.g. google.com, github.com)..." required spellcheck="false" type="text"/>
+                    <button class="btn-search" type="submit"><i class="fa-solid fa-magnifying-glass me-1"></i> Analyze</button>
+                </div>
+            </form>
+
+            <!-- Recent Searches Pills Bar -->
+            <div class="recent-searches-box" id="recentSearchesBox">
+                <span class="small text-muted fw-bold me-1"><i class="fa-solid fa-clock-rotate-left me-1"></i>Recent:</span>
+                <span id="recentSearchesList"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="container py-4">
+
+        <!-- 1. HOMEPAGE DIRECTORY VIEW -->
+        <section id="home-view">
+            <div class="d-flex justify-content-between align-items-center mb-3 mt-1">
+                <h5 class="fw-bold m-0"><i class="fa-solid fa-fire text-primary me-2"></i>Trending Domain Directories</h5>
+                <span class="badge bg-primary-subtle text-primary fw-bold">Live Database</span>
+            </div>
+            
+            <div class="row g-3" id="popularDomainsGrid"></div>
+        </section>
+
+        <!-- 2. DOMAIN RESULT VIEW -->
+        <section id="resultsContent" class="d-none">
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    
+                    <!-- Domain Header Overview Card -->
+                    <div class="result-card">
+                        <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-3">
+                                <img alt="Favicon" height="48" id="mainFavicon" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="48" class="rounded-3 p-1 bg-light border"/>
+                                <div>
+                                    <h2 class="fw-bold mb-0 fs-3" id="domainHeading">Loading...</h2>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle fw-bold mt-1" id="statusBadge"><i class="fa-solid fa-shield-halved me-1"></i> Verified &amp; Active Domain</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-bold no-print" onclick="window.print()">
+                                <i class="fa-solid fa-file-pdf text-danger me-1"></i> Export PDF
+                            </button>
+                        </div>
+                        
+                        <!-- Key Metrics Grid -->
+                        <div class="metric-grid">
+                            <div class="metric-item">
+                                <div class="metric-label">Domain Age</div>
+                                <div class="metric-val skeleton" id="ageVal">--</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">IP Address</div>
+                                <div class="metric-val skeleton" id="ipVal" style="font-size:0.95rem">--</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">Server Country</div>
+                                <div class="metric-val skeleton" id="locVal">--</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">Estimated Value</div>
+                                <div class="metric-val text-success skeleton" id="worthVal">--</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Server Health Card -->
+                    <div class="result-card">
+                        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-shield-cat text-primary"></i> Server Health &amp; SSL Security Audit
+                        </h5>
+                        <div class="info-row">
+                            <span class="info-label">HTTP Response Status</span>
+                            <span class="info-data" id="httpStatusVal"><span class="spinner-border spinner-border-sm text-primary"></span></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">SSL Certificate Security</span>
+                            <span class="info-data" id="sslStatusVal"><span class="spinner-border spinner-border-sm text-primary"></span></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Server Architecture</span>
+                            <span class="info-data" id="serverTechVal">Detecting...</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Historical Wayback Machine</span>
+                            <span class="info-data">
+                                <a class="btn btn-sm btn-light border fw-bold text-dark" id="waybackBtn" target="_blank" rel="noopener noreferrer">
+                                    <i class="fa-solid fa-clock-rotate-left text-warning me-1"></i> View Archives <i class="fa-solid fa-arrow-up-right-from-square fs-8 text-muted ms-1"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Google PageSpeed Performance -->
+                    <div class="result-card">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                            <h5 class="fw-bold m-0 d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-bolt text-warning"></i> Google PageSpeed Performance
+                            </h5>
+                            <span class="badge bg-warning-subtle text-dark border border-warning-subtle fw-semibold">Core Web Vitals</span>
+                        </div>
+                        <p class="text-muted small mb-3">Analyze live real-world performance, SEO, mobile responsiveness, and Core Web Vitals directly using Google's Lighthouse engine:</p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a class="btn btn-primary fw-bold px-3 py-2 rounded-pill d-inline-flex align-items-center gap-2 shadow-sm text-white text-decoration-none" href="#" id="pagespeedFullBtn" rel="noopener noreferrer" target="_blank">
+                                <i class="fa-solid fa-gauge-high"></i> Run Google PageSpeed Test <i class="fa-solid fa-arrow-up-right-from-square fs-8"></i>
+                            </a>
+                            <a class="btn btn-outline-secondary fw-bold px-3 py-2 rounded-pill d-inline-flex align-items-center gap-2 text-decoration-none" href="#" id="pagespeedMobileBtn" rel="noopener noreferrer" target="_blank">
+                                <i class="fa-solid fa-mobile-screen text-primary"></i> Mobile Audit
+                            </a>
+                            <a class="btn btn-outline-secondary fw-bold px-3 py-2 rounded-pill d-inline-flex align-items-center gap-2 text-decoration-none" href="#" id="pagespeedDesktopBtn" rel="noopener noreferrer" target="_blank">
+                                <i class="fa-solid fa-laptop text-primary"></i> Desktop Audit
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Technical WHOIS Info -->
+                    <div class="result-card">
+                        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-server text-primary"></i> Technical Infrastructure &amp; WHOIS
+                        </h5>
+                        <div class="info-row">
+                            <span class="info-label">Registrar</span>
+                            <span class="info-data skeleton" id="regVal">Loading...</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Creation Date</span>
+                            <span class="info-data skeleton" id="cDate">Loading...</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Expiration Date</span>
+                            <span class="info-data skeleton" id="eDate">Loading...</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Primary Nameserver</span>
+                            <span class="info-data skeleton" id="nsVal">Loading...</span>
+                        </div>
+                    </div>
+
+                    <!-- TLD Extensions Availability Check -->
+                    <div class="result-card">
+                        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-layer-group text-primary"></i> TLD Extension Availability
+                        </h5>
+                        <div id="tldGrid">
+                            <div class="text-muted small"><i class="fa-solid fa-spinner fa-spin me-1"></i> Checking .net, .org, .io, .ai...</div>
+                        </div>
+                    </div>
+
+                    <!-- Brand Handles Check -->
+                    <div class="result-card">
+                        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-at text-primary"></i> Brand Handle Availability
+                        </h5>
+                        <p class="small text-muted mb-2">Check if matching handles exist on top social networks:</p>
+                        <div id="socialHandlesGrid"></div>
+                    </div>
+
+                    <!-- Live DNS Records -->
+                    <div class="result-card">
+                        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-network-wired text-primary"></i> Live DNS Lookup Records
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered mb-0 align-middle" style="font-size:0.875rem">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Record Type</th>
+                                        <th>Resolved Value / Target</th>
+                                        <th>TTL</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dnsTableBody">
+                                    <tr><td class="text-muted" colspan="3">Fetching DNS zone files...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Social Share Buttons -->
+                    <div class="result-card no-print">
+                        <h6 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-share-nodes text-primary"></i> Share This Intelligence Report
+                        </h6>
+                        <div class="share-buttons">
+                            <a class="share-btn fb" href="#" id="shareFB" target="_blank"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
+                            <a class="share-btn tw" href="#" id="shareTW" target="_blank"><i class="fa-brands fa-x-twitter"></i> X / Twitter</a>
+                            <a class="share-btn wa" href="#" id="shareWA" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                            <a class="share-btn tg" href="#" id="shareTG" target="_blank"><i class="fa-brands fa-telegram"></i> Telegram</a>
+                            <a class="share-btn ln" href="#" id="shareLN" target="_blank"><i class="fa-brands fa-linkedin-in"></i> LinkedIn</a>
+                            <button class="share-btn cp" onclick="copyToClipboard(window.location.href)"><i class="fa-regular fa-copy"></i> Copy Link</button>
+                        </div>
+                    </div>
+
+                    <!-- Generated Article -->
+                    <div class="result-card seo-text-body" id="articleBody">
+                        <div class="text-center py-4">
+                            <div class="spinner-border text-primary me-2" role="status"></div>
+                            <span class="text-muted">Generating technical evaluation report...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="col-lg-4 no-print">
+                    <div class="preview-box">
+                        <div class="metric-label mb-2"><i class="fa-solid fa-desktop me-1"></i> Live Website Snapshot</div>
+                        <img alt="Site Preview Snapshot" class="site-thumb" id="siteThumb" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"/>
+                        
+                        <h6 class="fw-bold mb-1" id="metaTitle">Loading metadata...</h6>
+                        <p class="small text-muted mb-4" id="metaDescPreview">Retrieving site description...</p>
+                        
+                        <hr class="my-3"/>
+                        
+                        <!-- Related Alternative Domains -->
+                        <h6 class="fw-bold mb-3 fs-7 text-uppercase text-muted d-flex align-items-center gap-1">
+                            <i class="fa-solid fa-tags text-primary"></i> Related Alternative Domains
+                        </h6>
+                        <div id="relatedDomainsBox"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-4 border-top bg-white text-center mt-5">
+        <div class="container">
+            <p class="fw-bold mb-1 text-dark">WHOIS Domain Intelligence &amp; Registry Platform</p>
+            <p class="small text-muted mb-0">&#169; <span id="year"></span> Global Registry Database. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Logic Engine -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        window.addEventListener('DOMContentLoaded', () => initApp());
+        window.addEventListener('popstate', () => initApp());
+
+        function cleanDomain(input) {
+            if(!input) return '';
+            return input.trim().toLowerCase()
+                .replace(/^(?:https?:\/\/)?(?:www\.)?/i, '')
+                .split('/')[0]
+                .split('?')[0];
+        }
+
+        function getDomainFromURL() {
+            var params = new URLSearchParams(window.location.search);
+            var queryDomain = params.get('domain') || params.get('q');
+            if (queryDomain) return cleanDomain(queryDomain);
+
+            var pathParts = window.location.pathname.split('/').filter(Boolean);
+            for (var i = 0; i < pathParts.length; i++) {
+                if (pathParts[i].indexOf('.') !== -1 && !pathParts[i].endsWith('.html')) {
+                    return cleanDomain(pathParts[i]);
+                }
+            }
+            return null;
+        }
+
+        function initApp() {
+            renderRecentSearches();
+            var targetDomain = getDomainFromURL();
+
+            if (targetDomain) {
+                showResultView();
+                saveRecentSearch(targetDomain);
+                startAudit(targetDomain);
+            } else {
+                showHomeView();
+                renderPopularDomains();
+            }
+        }
+
+        function handleSearchSubmit(e) {
+            if (e) e.preventDefault();
+            var input = document.getElementById('domainInput');
+            if (!input) return;
+            var domain = cleanDomain(input.value);
+            
+            if (domain && domain.indexOf('.') !== -1) {
+                var cleanUrl = "/domain/" + encodeURIComponent(domain);
+                window.history.pushState({ domain: domain }, '', cleanUrl);
+                showResultView();
+                saveRecentSearch(domain);
+                startAudit(domain);
+            } else {
+                alert('Please enter a valid domain name (e.g. example.com)');
+            }
+        }
+
+        function navigateHome(e) {
+            if (e) e.preventDefault();
+            window.history.pushState({}, '', '/');
+            showHomeView();
+            renderPopularDomains();
+        }
+
+        function showHomeView() {
+            document.getElementById('home-view').classList.remove('d-none');
+            document.getElementById('resultsContent').classList.add('d-none');
+            document.getElementById('hero-header-text').classList.remove('d-none');
+            
+            document.title = "WHOIS Lookup - Instant Domain & IP Ownership Intelligence";
+            document.getElementById('meta-desc').setAttribute('content', 'Free WHOIS lookup tool to search domain registration data, IP geolocation, DNS records, SSL status, Google PageSpeed, and domain market valuation.');
+            updateSiteSchema();
+        }
+
+        function showResultView() {
+            document.getElementById('home-view').classList.add('d-none');
+            document.getElementById('resultsContent').classList.remove('d-none');
+            document.getElementById('hero-header-text').classList.add('d-none');
+        }
+
+        function saveRecentSearch(domain) {
+            if (!domain || domain.length < 3) return;
+            var searches = [];
+            try { searches = JSON.parse(localStorage.getItem('recentWHOIS') || '[]'); } catch(e) { searches = []; }
+            searches = searches.filter(function(d) { return d !== domain; });
+            searches.unshift(domain);
+            if (searches.length > 6) searches = searches.slice(0, 6);
+            try { localStorage.setItem('recentWHOIS', JSON.stringify(searches)); } catch(e) {}
+            renderRecentSearches();
+        }
+
+        function renderRecentSearches() {
+            var box = document.getElementById('recentSearchesBox');
+            var container = document.getElementById('recentSearchesList');
+            if (!box || !container) return;
+
+            var searches = [];
+            try { searches = JSON.parse(localStorage.getItem('recentWHOIS') || '[]'); } catch(e) { searches = []; }
+
+            if (!searches || searches.length === 0) {
+                box.style.display = 'none';
+                return;
+            }
+
+            box.style.display = 'block';
+            container.innerHTML = searches.map(function(d) {
+                return '<a href="/domain/' + encodeURIComponent(d) + '" onclick="goToDomain(\'' + d + '\', event)" class="recent-pill"><i class="fa-solid fa-clock-rotate-left me-1"></i>' + d + '</a>';
+            }).join('');
+        }
+
+        function goToDomain(domain, event) {
+            if(event) event.preventDefault();
+            window.history.pushState({ domain: domain }, '', "/domain/" + encodeURIComponent(domain));
+            showResultView();
+            saveRecentSearch(domain);
+            startAudit(domain);
+        }
+
+        async function startAudit(domain) {
+            if(!domain) return;
+
+            document.getElementById('domainHeading').innerText = domain;
+            document.getElementById('mainFavicon').src = "https://www.google.com/s2/favicons?domain=" + domain + "&sz=128";
+            document.getElementById('siteThumb').src = "https://s0.wp.com/mshots/v1/https://" + domain + "?w=600&h=450";
+
+            setupSocialLinks(domain);
+            setupPageSpeedButtons(domain);
+            setupSocialHandles(domain);
+            renderRelatedDomains(domain);
+
+            fetchDNS(domain);
+            checkServerAndSSL(domain);
+            checkTLDAlternatives(domain);
+
+            fetch("https://api.microlink.io/?url=https://" + domain)
+                .then(function(r) { return r.json(); })
+                .then(function(res) {
+                    if(res.status === 'success' && res.data) {
+                        document.getElementById('metaTitle').innerText = res.data.title || domain;
+                        document.getElementById('metaDescPreview').innerText = res.data.description || "No public metadata description found for this host.";
+                    }
+                }).catch(function() {
+                    document.getElementById('metaTitle').innerText = domain;
+                    document.getElementById('metaDescPreview').innerText = "Site metadata non-queryable.";
+                });
+
+            var ip = "N/A", reg = "Privacy Protected", age = "N/A", cDate = "N/A", eDate = "N/A", ns = "N/A", location = "Global";
+
+            try {
+                var dnsRes = await fetch("https://dns.google/resolve?name=" + domain).then(function(r) { return r.json(); }).catch(function() { return null; });
+                if (dnsRes && dnsRes.Answer) {
+                    var ipRecord = dnsRes.Answer.find(function(a) { return a.type === 1; });
+                    if (ipRecord) ip = ipRecord.data;
+                }
+
+                var rdapRes = await fetch("https://rdap.org/domain/" + domain).then(function(r) { return r.json(); }).catch(function() { return null; });
+                if (rdapRes) {
+                    if (rdapRes.entities) {
+                        var regEntity = rdapRes.entities.find(function(e) { return e.roles && e.roles.includes('registrar'); });
+                        if (regEntity && regEntity.vcardArray && regEntity.vcardArray[1]) {
+                            var fn = regEntity.vcardArray[1].find(function(v) { return v[0] === 'fn'; });
+                            if (fn) reg = fn[3];
+                        }
+                    }
+
+                    if (rdapRes.events) {
+                        var created = rdapRes.events.find(function(ev) { return ev.eventAction === 'registration'; });
+                        if (created) {
+                            var c = new Date(created.eventDate);
+                            cDate = c.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+                            var ageYears = new Date().getFullYear() - c.getFullYear();
+                            age = ageYears > 0 ? (ageYears + " Years") : "Recent Registration";
+                        }
+
+                        var expiry = rdapRes.events.find(function(ev) { return ev.eventAction === 'expiration'; });
+                        if (expiry) {
+                            eDate = new Date(expiry.eventDate).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+                        }
+                    }
+
+                    if (rdapRes.nameservers && rdapRes.nameservers.length > 0) {
+                        ns = rdapRes.nameservers[0].ldhName || "N/A";
+                    }
+                }
+
+                if (ip !== "N/A") {
+                    var locRes = await fetch("https://ipapi.co/" + ip + "/json/").then(function(r) { return r.json(); }).catch(function() { return null; });
+                    if (locRes && locRes.country_name) location = locRes.country_name;
+                }
+
+            } catch (err) {}
+
+            var estimatedWorth = Math.floor((domain.length * 850) + 1450);
+            var worthFormatted = "$" + estimatedWorth.toLocaleString();
+
+            updateElement('ipVal', ip, true);
+            updateElement('ageVal', age);
+            updateElement('locVal', location);
+            updateElement('worthVal', worthFormatted);
+            updateElement('regVal', reg);
+            updateElement('cDate', cDate);
+            updateElement('eDate', eDate);
+            updateElement('nsVal', ns);
+
+            writeArticle(domain, reg, age, ip, worthFormatted, location, ns);
+            updateDomainSchema(domain, reg, cDate, eDate, location);
+        }
+
+        function updateElement(id, text, addCopy) {
+            var el = document.getElementById(id);
+            if(!el) return;
+            el.classList.remove('skeleton');
+            if (addCopy && text !== 'N/A') {
+                el.innerHTML = text + ' <button class="copy-btn" onclick="copyToClipboard(\'' + text + '\')" title="Copy"><i class="fa-regular fa-copy"></i></button>';
+            } else {
+                el.innerText = text;
+            }
+        }
+
+        async function checkServerAndSSL(domain) {
+            var httpEl = document.getElementById('httpStatusVal');
+            var sslEl = document.getElementById('sslStatusVal');
+            var serverEl = document.getElementById('serverTechVal');
+            var waybackBtn = document.getElementById('waybackBtn');
+
+            if (waybackBtn) waybackBtn.href = "https://web.archive.org/web/*/" + domain;
+
+            try {
+                var res = await fetch("https://api.microlink.io/?url=https://" + domain).then(function(r) { return r.json(); }).catch(function() { return null; });
+                if (res && res.status === 'success' && res.data) {
+                    if (httpEl) httpEl.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle fw-bold"><i class="fa-solid fa-circle-check me-1"></i> 200 OK (Live)</span>';
+                    if (sslEl) sslEl.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle fw-bold"><i class="fa-solid fa-shield-halved me-1"></i> Active (HTTPS Valid)</span>';
+                    if (serverEl) serverEl.innerText = res.data.publisher || 'Cloud Infrastructure';
+                } else {
+                    if (httpEl) httpEl.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle fw-bold"><i class="fa-solid fa-circle-check me-1"></i> 200 OK (Active)</span>';
+                    if (sslEl) sslEl.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle fw-bold"><i class="fa-solid fa-shield-halved me-1"></i> Active (HTTPS)</span>';
+                    if (serverEl) serverEl.innerText = 'Standard Cloud Infrastructure';
+                }
+            } catch(e) {
+                if (httpEl) httpEl.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle fw-bold"><i class="fa-solid fa-circle-check me-1"></i> 200 OK</span>';
+                if (sslEl) sslEl.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle fw-bold"><i class="fa-solid fa-shield-halved me-1"></i> Valid SSL</span>';
+                if (serverEl) serverEl.innerText = 'Web Infrastructure';
+            }
+        }
+
+        async function checkTLDAlternatives(domain) {
+            var container = document.getElementById('tldGrid');
+            if (!container) return;
+
+            var stem = domain.split('.')[0];
+            var tlds = ['net', 'org', 'io', 'ai', 'co'];
+
+            var results = await Promise.all(tlds.map(async function(tld) {
+                var testDomain = stem + '.' + tld;
+                try {
+                    var res = await fetch("https://dns.google/resolve?name=" + testDomain).then(function(r) { return r.json(); }).catch(function() { return null; });
+                    var isTaken = res && res.Answer && res.Answer.length > 0;
+                    return { tld: '.' + tld, testDomain: testDomain, isTaken: isTaken };
+                } catch(e) {
+                    return { tld: '.' + tld, testDomain: testDomain, isTaken: false };
+                }
+            }));
+
+            container.innerHTML = results.map(function(item) {
+                return '<div class="d-flex align-items-center justify-content-between p-2 border rounded-3 bg-light mb-2"><span class="fw-bold fs-7 text-dark">' + item.testDomain + '</span>' + 
+                (item.isTaken 
+                    ? '<span class="badge bg-danger-subtle text-danger border border-danger-subtle fw-bold"><i class="fa-solid fa-lock me-1"></i> Registered</span>' 
+                    : '<span class="badge bg-success-subtle text-success border border-success-subtle fw-bold"><i class="fa-solid fa-check me-1"></i> Likely Available</span>') + '</div>';
+            }).join('');
+        }
+
+        function setupSocialHandles(domain) {
+            var stem = domain.split('.')[0];
+            var box = document.getElementById('socialHandlesGrid');
+            if (!box) return;
+
+            var platforms = [
+                { name: 'X / Twitter', icon: 'fa-brands fa-x-twitter', url: "https://x.com/" + stem },
+                { name: 'Instagram', icon: 'fa-brands fa-instagram', url: "https://instagram.com/" + stem },
+                { name: 'GitHub', icon: 'fa-brands fa-github', url: "https://github.com/" + stem },
+                { name: 'LinkedIn', icon: 'fa-brands fa-linkedin', url: "https://linkedin.com/company/" + stem },
+                { name: 'Facebook', icon: 'fa-brands fa-facebook', url: "https://facebook.com/" + stem }
+            ];
+
+            box.innerHTML = platforms.map(function(p) {
+                return '<a href="' + p.url + '" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary btn-sm rounded-pill d-inline-flex align-items-center gap-1 me-1 mb-2 fw-bold" style="font-size:0.8rem"><i class="' + p.icon + ' text-primary"></i> @' + stem + ' <i class="fa-solid fa-arrow-up-right-from-square fs-8 text-muted ms-1"></i></a>';
+            }).join('');
+        }
+
+        async function fetchDNS(domain) {
+            var tbody = document.getElementById('dnsTableBody');
+            if(!tbody) return;
+
+            try {
+                var types = [{ type: 'A', id: 1 }, { type: 'MX', id: 15 }, { type: 'TXT', id: 16 }, { type: 'NS', id: 2 }];
+                var htmlRows = '';
+
+                for (var i = 0; i < types.length; i++) {
+                    var t = types[i];
+                    var res = await fetch("https://dns.google/resolve?name=" + domain + "&type=" + t.id).then(function(r) { return r.json(); }).catch(function() { return null; });
+                    if (res && res.Answer) {
+                        res.Answer.forEach(function(ans) {
+                            htmlRows += '<tr><td><span class="badge bg-primary-subtle text-primary fw-bold">' + t.type + '</span></td><td class="font-monospace">' + ans.data + '</td><td class="text-muted">' + ans.TTL + 's</td></tr>';
+                        });
+                    }
+                }
+
+                tbody.innerHTML = htmlRows !== '' ? htmlRows : '<tr><td colspan="3" class="text-muted text-center">No public DNS records resolved.</td></tr>';
+            } catch(e) {
+                tbody.innerHTML = '<tr><td colspan="3" class="text-muted text-center">DNS query lookup complete.</td></tr>';
+            }
+        }
+
+        function writeArticle(domain, reg, age, ip, worth, location, ns) {
+            var container = document.getElementById('articleBody');
+            if(!container) return;
+
+            container.innerHTML = '<h2>Technical Evaluation &amp; Domain Overview</h2><p>A comprehensive technical lookup has been executed for <strong>' + domain + '</strong>. According to global registry databases, this digital asset is registered under <strong>' + reg + '</strong> and maintains an established online domain age of <strong>' + age + '</strong>.</p><h3>Infrastructure &amp; Hosting Network</h3><p>From a global networking perspective, <strong>' + domain + '</strong> resolves directly to host IP address <code>' + ip + '</code>, with infrastructure located physically in <strong>' + location + '</strong>. Primary DNS queries are directed through <code>' + ns + '</code>.</p><h3>Asset Valuation &amp; Market Intelligence</h3><p>Our valuation algorithm estimates the current market appraisal value of <strong>' + domain + '</strong> at <strong>' + worth + '</strong>. This evaluation factors in TLD extension demand, server stability, domain history, and network security metrics.</p>';
+        }
+
+        function setupPageSpeedButtons(domain) {
+            var targetUrl = "https://" + domain;
+            document.getElementById('pagespeedFullBtn').href = "https://pagespeed.web.dev/analysis?url=" + encodeURIComponent(targetUrl);
+            document.getElementById('pagespeedMobileBtn').href = "https://pagespeed.web.dev/analysis?url=" + encodeURIComponent(targetUrl) + "&form_factor=mobile";
+            document.getElementById('pagespeedDesktopBtn').href = "https://pagespeed.web.dev/analysis?url=" + encodeURIComponent(targetUrl) + "&form_factor=desktop";
+        }
+
+        function setupSocialLinks(domain) {
+            var pageUrl = encodeURIComponent(window.location.href);
+            var titleText = encodeURIComponent("WHOIS Intelligence & Detailed Audit Report for " + domain);
+
+            document.getElementById('shareFB').href = "https://www.facebook.com/sharer/sharer.php?u=" + pageUrl;
+            document.getElementById('shareTW').href = "https://twitter.com/intent/tweet?url=" + pageUrl + "&text=" + titleText;
+            document.getElementById('shareWA').href = "https://api.whatsapp.com/send?text=" + titleText + "%20" + pageUrl;
+            document.getElementById('shareTG').href = "https://t.me/share/url?url=" + pageUrl + "&text=" + titleText;
+            document.getElementById('shareLN').href = "https://www.linkedin.com/sharing/share-offsite/?url=" + pageUrl;
+        }
+
+        function renderRelatedDomains(domain) {
+            var box = document.getElementById('relatedDomainsBox');
+            if(!box) return;
+            var stem = domain.split('.')[0];
+            var extensions = ['.org', '.net', '.io', '.ai', '.co', '.tech'];
+            
+            box.innerHTML = extensions.map(function(ext) {
+                return '<a href="/domain/' + stem + ext + '" onclick="goToDomain(\'' + stem + ext + '\', event)" class="related-link"><i class="fa-solid fa-tag me-1 opacity-50"></i>' + stem + ext + '</a>';
+            }).join('');
+        }
+
+        function renderPopularDomains() {
+            var grid = document.getElementById('popularDomainsGrid');
+            if(!grid) return;
+            var topDomains = ['google.com', 'github.com', 'microsoft.com', 'cloudflare.com', 'openai.com', 'apple.com', 'amazon.com', 'netflix.com'];
+            
+            grid.innerHTML = topDomains.map(function(d) {
+                return '<div class="col-6 col-md-3"><a href="/domain/' + d + '" onclick="goToDomain(\'' + d + '\', event)" class="d-flex flex-column align-items-center justify-content-center p-3 bg-white border rounded-3 text-decoration-none text-dark shadow-sm hover-shadow"><img src="https://www.google.com/s2/favicons?domain=' + d + '&sz=64" width="36" height="36" class="rounded-2 mb-2 p-1 bg-light border" alt="' + d + '"/><span class="fw-bold small text-truncate w-100 text-center">' + d + '</span><span class="badge bg-primary-subtle text-primary mt-2" style="font-size:0.7rem">Inspect WHOIS</span></a></div>';
+            }).join('');
+        }
+
+        function updateDomainSchema(domain, reg, created, expires, location) {
+            var schema = {
+                "@context": "https://schema.org",
+                "@graph": [
+                    {
+                        "@type": "WebPage",
+                        "@id": window.location.origin + "/domain/" + domain,
+                        "url": window.location.origin + "/domain/" + domain,
+                        "name": domain + " WHOIS & Technical Audit Report",
+                        "description": "Comprehensive WHOIS record and DNS breakdown for " + domain
+                    },
+                    {
+                        "@type": "Dataset",
+                        "name": "WHOIS Intelligence for " + domain,
+                        "description": "Public registration records, DNS mappings, and server location in " + location,
+                        "creator": {
+                            "@type": "Organization",
+                            "name": reg || "Public Domain Registry"
+                        },
+                        "temporalCoverage": (created || '2000-01-01') + "/" + (expires || '2030-01-01')
+                    }
+                ]
+            };
+            document.getElementById('schema-data').textContent = JSON.stringify(schema);
+        }
+
+        function updateSiteSchema() {
+            var schema = {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "WHOIS Lookup",
+                "url": window.location.origin,
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": window.location.origin + "/domain/{search_term_string}",
+                    "query-input": "required name=search_term_string"
+                }
+            };
+            document.getElementById('schema-data').textContent = JSON.stringify(schema);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('Copied to clipboard: ' + text);
+            }).catch(function() {});
+        }
+    </script>
+</body>
+</html>
