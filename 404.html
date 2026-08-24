@@ -4,86 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- الوسوم الافتراضية -->
-    <title id="page-title">WHOIS Lookup - Free Domain &amp; DNS Intelligence</title>
-    <meta id="meta-description" name="description" content="Instant WHOIS lookup tool. Search domain registration details, live DNS records, server location, and valuation report.">
+    <!-- Dynamic SEO Meta Tags -->
+    <title id="page-title">WHOIS Lookup - Domain Directory &amp; DNS Intelligence</title>
+    <meta id="meta-description" name="description" content="Explore live domain directory, search WHOIS registration records, live DNS zone files, and domain valuation.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" id="canonical-url" href="https://whois-lookup.github.io/">
 
-    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="WHOIS Lookup">
-    <meta property="og:title" id="og-title" content="WHOIS Lookup - Free Domain Intelligence">
-    <meta property="og:description" id="og-description" content="Comprehensive WHOIS database search, live DNS records, and domain intelligence.">
+    <meta property="og:title" id="og-title" content="WHOIS Lookup - Domain Directory">
+    <meta property="og:description" id="og-description" content="Comprehensive WHOIS database and live domain directory.">
     <meta property="og:url" id="og-url" content="https://whois-lookup.github.io/">
 
-    <!-- Schema Container -->
     <script type="application/ld+json" id="schema-data"></script>
 
-    <!-- ⚡ سكربت تغيير الـ Title و Meta Description فورياً لجوجل ⚡ -->
+    <!-- ⚡ Instant Head SEO Router ⚡ -->
     <script>
         (function() {
             var params = new URLSearchParams(window.location.search);
-            var q = params.get('domain') || params.get('q');
-            
-            // في حال تم فتح الرابط بمسار مباشر /domain/name.com
-            if (!q) {
-                var parts = window.location.pathname.split('/').filter(Boolean);
-                for (var i = 0; i < parts.length; i++) {
-                    if (parts[i].indexOf('.') !== -1 && !parts[i].endsWith('.html')) {
-                        q = parts[i];
-                        break;
-                    }
-                }
+            var domain = params.get('domain') || params.get('q');
+            var page = params.get('page');
+
+            if (domain) {
+                domain = domain.trim().toLowerCase().replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0].split('?')[0];
+                var title = domain + " WHOIS Lookup, DNS Records & Expiration Date";
+                var desc = "Detailed WHOIS lookup report for " + domain + ". Check registration dates, server IP routing, nameservers, and valuation.";
+                var url = "https://whois-lookup.github.io/?domain=" + domain;
+                
+                document.title = title;
+                setM('description', desc);
+                setOG('og:title', title);
+                setOG('og:description', desc);
+                setOG('og:url', url);
+            } else if (page) {
+                var pTitle = "Domain Directory - Page " + page + " | WHOIS Lookup";
+                document.title = pTitle;
             }
 
-            if (q) {
-                var domain = q.trim().toLowerCase().replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0].split('?')[0];
-                if (domain && domain.indexOf('.') !== -1) {
-                    var tld = domain.split('.').pop().toUpperCase();
-                    
-                    // 🎯 صياغة العنوان والوصف المخصصين للنطاق
-                    var dynamicTitle = domain + " WHOIS Lookup, DNS Records & Expiration Date";
-                    var dynamicDesc = "Detailed WHOIS lookup report for " + domain + " (." + tld + "). Check registration dates, server IP routing, nameservers, SSL security, and valuation.";
-                    var pageUrl = "https://whois-lookup.github.io/?domain=" + domain;
-
-                    // 1. تحديث العنوان
-                    document.title = dynamicTitle;
-
-                    // 2. تحديث الميتا ديسكريبشن
-                    var mDesc = document.getElementById('meta-description');
-                    if (mDesc) mDesc.setAttribute('content', dynamicDesc);
-
-                    var ogT = document.getElementById('og-title');
-                    if (ogT) ogT.setAttribute('content', dynamicTitle);
-
-                    var ogD = document.getElementById('og-description');
-                    if (ogD) ogD.setAttribute('content', dynamicDesc);
-
-                    var ogU = document.getElementById('og-url');
-                    if (ogU) ogU.setAttribute('content', pageUrl);
-
-                    var can = document.getElementById('canonical-url');
-                    if (can) can.setAttribute('href', pageUrl);
-
-                    // 3. تحديث الـ Schema لجوجل
-                    var sData = document.getElementById('schema-data');
-                    if (sData) {
-                        sData.textContent = JSON.stringify({
-                            "@context": "https://schema.org",
-                            "@type": "TechArticle",
-                            "headline": dynamicTitle,
-                            "description": dynamicDesc,
-                            "url": pageUrl,
-                            "author": { "@type": "Organization", "name": "WHOIS Lookup" }
-                        });
-                    }
-                }
-            }
+            function setM(k, v) { var el = document.getElementById('meta-description'); if(el) el.setAttribute('content', v); }
+            function setOG(k, v) { var el = document.querySelector('meta[property="' + k + '"]'); if(el) el.setAttribute('content', v); }
         })();
     </script>
 
-    <!-- تنسيقات خفيفة مدمجة لضمان سرعة 100% في PageSpeed -->
+    <!-- Lightweight Zero-Dependency CSS -->
     <style>
         :root {
             --primary: #0052ff;
@@ -98,13 +61,16 @@
             --radius: 12px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 2.5rem; }
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 2.5rem; }
         .container { max-width: 1050px; margin: 0 auto; padding: 0 1rem; }
         
         .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0.85rem 0; }
+        .nav-wrap { display: flex; justify-content: space-between; align-items: center; }
         .nav-brand { font-size: 1.25rem; font-weight: 800; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
         .nav-brand span { color: var(--primary); }
-        
+        .nav-links a { font-size: 0.9rem; font-weight: 700; color: var(--text-muted); text-decoration: none; margin-left: 1rem; }
+        .nav-links a:hover { color: var(--primary); }
+
         .hero { background: var(--surface); border-bottom: 1px solid var(--border); padding: 2.5rem 0 2rem; text-align: center; }
         .hero h1 { font-size: 1.85rem; font-weight: 800; margin-bottom: 0.5rem; }
         .hero p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
@@ -114,9 +80,6 @@
         .search-input:focus { border-color: var(--primary); }
         .search-btn { background: var(--primary); color: #fff; border: none; padding: 0 1.5rem; border-radius: var(--radius); font-weight: 700; cursor: pointer; }
         .search-btn:hover { background: var(--primary-dark); }
-
-        .recent-bar { margin-top: 1rem; display: none; font-size: 0.85rem; }
-        .recent-tag { display: inline-block; background: #e2e8f0; color: #1e293b; padding: 0.25rem 0.65rem; border-radius: 20px; text-decoration: none; margin: 0.2rem; font-weight: 600; }
 
         .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-top: 1.25rem; }
         .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
@@ -134,61 +97,88 @@
         .table th, .table td { padding: 0.6rem; text-align: left; border-bottom: 1px solid var(--border); }
         .table th { background: #f1f5f9; color: var(--text-muted); }
 
-        .seo-content { line-height: 1.7; font-size: 0.95rem; color: #334155; }
-        .seo-content h2 { font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--text); }
-        .seo-content h3 { font-size: 1.05rem; margin: 1rem 0 0.25rem; color: var(--text); }
+        /* Directory Grid */
+        .dir-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+        .dir-card { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.9rem; transition: 0.2s; }
+        .dir-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,82,255,0.08); }
+        .dir-card img { width: 20px; height: 20px; border-radius: 4px; }
 
-        .popular-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
-        .pop-card { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--text); font-weight: 700; }
-        .pop-card:hover { border-color: var(--primary); }
+        /* Pagination Bar */
+        .pagination { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding: 1rem 0; border-top: 1px solid var(--border); }
+        .page-btn { padding: 0.5rem 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; font-weight: 700; font-size: 0.85rem; color: var(--text); }
+        .page-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
         .btn-link { display: inline-block; padding: 0.4rem 0.8rem; background: #e2e8f0; color: #0f172a; text-decoration: none; border-radius: 6px; font-size: 0.8rem; font-weight: 700; margin: 0.2rem; }
         .btn-link:hover { background: var(--primary); color: #fff; }
-        .copy-btn { background: none; border: none; color: var(--primary); cursor: pointer; font-size: 0.8rem; font-weight: 700; margin-left: 5px; }
-
         .d-none { display: none !important; }
         footer { text-align: center; margin-top: 2.5rem; font-size: 0.85rem; color: var(--text-muted); }
     </style>
 </head>
 <body>
 
+    <!-- Header Navigation -->
     <header class="header">
-        <div class="container">
-            <a href="/" onclick="goHome(event)" class="nav-brand">
+        <div class="container nav-wrap">
+            <a href="/" onclick="navRoute('/', event)" class="nav-brand">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0052ff" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 WHOIS<span>LOOKUP</span>
             </a>
+            <div class="nav-links">
+                <a href="/" onclick="navRoute('/', event)">Home</a>
+                <a href="/?page=1" onclick="navRoute('/?page=1', event)">Browse Directory</a>
+            </div>
         </div>
     </header>
 
+    <!-- Search Section -->
     <div class="hero">
         <div class="container">
             <h1 id="hero-title">Domain WHOIS &amp; DNS Intelligence</h1>
-            <p id="hero-desc">Fast, real-time domain records, owner verification, DNS zone lookup, and security audit.</p>
+            <p id="hero-desc">Real-time domain records, owner verification, DNS zone lookup, and live registry directory.</p>
             
             <form class="search-box" onsubmit="doSearch(event)">
-                <input type="text" id="domainInput" class="search-input" placeholder="Search domain (e.g. microsoft.com)..." required autocomplete="off">
+                <input type="text" id="domainInput" class="search-input" placeholder="Search any domain (e.g. microsoft.com)..." required autocomplete="off">
                 <button type="submit" class="search-btn">Analyze</button>
             </form>
-
-            <div id="recentBox" class="recent-bar">
-                <span style="font-weight:700;color:var(--text-muted)">Recent:</span>
-                <span id="recentList"></span>
-            </div>
         </div>
     </div>
 
     <main class="container">
 
-        <!-- 1. الواجهة الرئيسية -->
-        <section id="home-view">
-            <h2 style="font-size:1.15rem;font-weight:800;margin-top:1.5rem">Popular Domain Lookups</h2>
-            <div class="popular-grid" id="popularGrid"></div>
+        <!-- 1. HOMEPAGE VIEW -->
+        <section id="home-view" class="d-none">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem">
+                <h2 style="font-size:1.15rem;font-weight:800">Featured Domains</h2>
+                <a href="/?page=1" onclick="navRoute('/?page=1', event)" class="btn-link">View Full Directory &rarr;</a>
+            </div>
+            <div class="dir-grid" id="featuredGrid"></div>
         </section>
 
-        <!-- 2. واجهة فحص النطاق -->
-        <section id="result-view" class="d-none">
+        <!-- 2. DIRECTORY VIEW (يسحب من ملفات الـ TXT) -->
+        <section id="dir-view" class="d-none">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;flex-wrap:wrap;gap:0.5rem">
+                <div>
+                    <h2 style="font-size:1.25rem;font-weight:800">Domain Database Directory</h2>
+                    <p style="font-size:0.85rem;color:var(--text-muted)">Live registry index loaded from database shards.</p>
+                </div>
+                <span class="badge badge-success" id="pageIndicator">Page 1</span>
+            </div>
 
+            <!-- شبكة النطاقات المسحوبة من الـ txt -->
+            <div class="dir-grid" id="dirGrid">
+                <div style="grid-column: 1/-1; text-align:center; padding: 2rem; color:var(--text-muted)">Loading domain records from database...</div>
+            </div>
+
+            <!-- أزرار ترقيم الصفحات Pagination -->
+            <div class="pagination">
+                <a href="#" id="prevBtn" class="page-btn">&larr; Previous Page</a>
+                <span style="font-weight:700;font-size:0.85rem;color:var(--text-muted)" id="pageStatus">Page 1</span>
+                <a href="#" id="nextBtn" class="page-btn">Next Page &rarr;</a>
+            </div>
+        </section>
+
+        <!-- 3. WHOIS RESULT VIEW -->
+        <section id="result-view" class="d-none">
             <div class="card">
                 <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:0.75rem">
                     <div>
@@ -232,63 +222,63 @@
                 <div class="table-wrap">
                     <table class="table">
                         <thead><tr><th>Type</th><th>Resolved Target</th><th>TTL</th></tr></thead>
-                        <tbody id="dnsTable"><tr><td colspan="3" style="text-align:center;color:var(--text-muted)">Querying live DNS records...</td></tr></tbody>
+                        <tbody id="dnsTable"><tr><td colspan="3" style="text-align:center;color:var(--text-muted)">Querying DNS zone files...</td></tr></tbody>
                     </table>
                 </div>
             </div>
-
-            <div class="card">
-                <h3 style="font-size:1.05rem;margin-bottom:0.5rem">Alternative TLDs</h3>
-                <div id="relatedBox"></div>
-            </div>
-
-            <div class="card seo-content" id="articleBody">
-                <p style="text-align:center;color:var(--text-muted)">Generating comprehensive evaluation report...</p>
-            </div>
-
         </section>
 
     </main>
 
     <footer>
-        <p>&copy; <span id="year"></span> WHOIS Lookup Platform. All records verified in real-time.</p>
+        <p>&copy; <span id="year"></span> WHOIS Lookup Platform. All records indexed in real-time.</p>
     </footer>
 
-    <!-- Controller Script -->
+    <!-- Logic Controller -->
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        window.addEventListener('DOMContentLoaded', init);
-        window.addEventListener('popstate', init);
+        window.addEventListener('DOMContentLoaded', router);
+        window.addEventListener('popstate', router);
 
         function clean(d) {
             if (!d) return '';
             return d.trim().toLowerCase().replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0].split('?')[0];
         }
 
-        function getTargetDomain() {
+        function router() {
             var params = new URLSearchParams(window.location.search);
-            var q = params.get('domain') || params.get('q');
-            if (q) return clean(q);
+            var domain = params.get('domain') || params.get('q');
+            var page = params.get('page');
 
-            var parts = window.location.pathname.split('/').filter(Boolean);
-            for (var i = 0; i < parts.length; i++) {
-                if (parts[i].indexOf('.') !== -1 && !parts[i].endsWith('.html')) return clean(parts[i]);
+            hideAllViews();
+
+            if (domain) {
+                // عرض صفحة الفحص للنطاق
+                document.getElementById('result-view').classList.remove('d-none');
+                document.getElementById('domainHeader').textContent = clean(domain);
+                runAudit(clean(domain));
+            } else if (page) {
+                // عرض صفحة الدليل مع رقم الصفحة من ملف الـ txt
+                document.getElementById('dir-view').classList.remove('d-none');
+                loadDirectoryPage(parseInt(page) || 1);
+            } else {
+                // عرض الواجهة الرئيسية
+                document.getElementById('home-view').classList.remove('d-none');
+                renderFeatured();
             }
-            return null;
         }
 
-        function init() {
-            renderRecent();
-            var target = getTargetDomain();
-            if (target) {
-                showResult(target);
-                saveRecent(target);
-                runAudit(target);
-            } else {
-                showHome();
-                renderPopular();
-            }
+        function hideAllViews() {
+            document.getElementById('home-view').classList.add('d-none');
+            document.getElementById('dir-view').classList.add('d-none');
+            document.getElementById('result-view').classList.add('d-none');
+        }
+
+        function navRoute(path, e) {
+            if (e) e.preventDefault();
+            window.history.pushState({}, '', path);
+            router();
         }
 
         function doSearch(e) {
@@ -296,119 +286,134 @@
             var val = clean(document.getElementById('domainInput').value);
             if (val && val.indexOf('.') !== -1) {
                 window.history.pushState({}, '', '/?domain=' + encodeURIComponent(val));
-                init();
+                router();
             }
         }
 
-        function goHome(e) {
-            if (e) e.preventDefault();
-            window.history.pushState({}, '', '/');
-            init();
-        }
+        /* 📁 وظيفة سحب النطاقات من ملف الـ TXT */
+        async function loadDirectoryPage(pageNum) {
+            var grid = document.getElementById('dirGrid');
+            var pageStatus = document.getElementById('pageStatus');
+            var pageIndicator = document.getElementById('pageIndicator');
+            var prevBtn = document.getElementById('prevBtn');
+            var nextBtn = document.getElementById('nextBtn');
 
-        function showHome() {
-            document.getElementById('home-view').classList.remove('d-none');
-            document.getElementById('result-view').classList.add('d-none');
-        }
+            pageStatus.textContent = "Page " + pageNum;
+            pageIndicator.textContent = "Page " + pageNum;
+            document.title = "Domain Directory - Page " + pageNum + " | WHOIS Lookup";
 
-        function showResult(domain) {
-            document.getElementById('home-view').classList.add('d-none');
-            document.getElementById('result-view').classList.remove('d-none');
-            document.getElementById('domainHeader').textContent = domain;
-        }
+            // أزرار السابق والتالي
+            prevBtn.href = pageNum > 1 ? "/?page=" + (pageNum - 1) : "#";
+            prevBtn.onclick = pageNum > 1 ? function(e){ navRoute("/?page=" + (pageNum - 1), e); } : function(e){ e.preventDefault(); };
+            
+            nextBtn.href = "/?page=" + (pageNum + 1);
+            nextBtn.onclick = function(e){ navRoute("/?page=" + (pageNum + 1), e); };
 
-        function saveRecent(domain) {
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 2rem; color:var(--text-muted)">Loading domains from database...</div>';
+
             try {
-                var s = JSON.parse(localStorage.getItem('recent_whois') || '[]');
-                s = s.filter(function(x) { return x !== domain; });
-                s.unshift(domain);
-                if (s.length > 6) s = s.slice(0, 6);
-                localStorage.setItem('recent_whois', JSON.stringify(s));
-            } catch(e) {}
-            renderRecent();
-        }
+                // جلب ملف الـ txt المناسب للصفحة
+                var res = await fetch('data/' + pageNum + '.txt');
+                
+                // في حال عدم وجود ملف مقسم، نحاول سحب domains.txt الأساسي
+                if (!res.ok) {
+                    res = await fetch('domains.txt');
+                }
+                
+                if (!res.ok) throw new Error('File not found');
 
-        function renderRecent() {
-            var box = document.getElementById('recentBox');
-            var list = document.getElementById('recentList');
-            if (!box || !list) return;
-            try {
-                var s = JSON.parse(localStorage.getItem('recent_whois') || '[]');
-                if (s.length === 0) { box.style.display = 'none'; return; }
-                box.style.display = 'block';
-                list.innerHTML = s.map(function(d) {
-                    return '<a href="/?domain=' + d + '" onclick="quickNav(\'' + d + '\', event)" class="recent-tag">' + d + '</a>';
+                var text = await res.text();
+                var domainList = text.split('\n').map(function(d){ return d.trim(); }).filter(function(d){ return d.length > 3 && d.includes('.'); });
+
+                if (domainList.length === 0) {
+                    grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 2rem;">No more domains found.</div>';
+                    return;
+                }
+
+                grid.innerHTML = domainList.map(function(d) {
+                    return '<a href="/?domain=' + d + '" onclick="navRoute(\'/?domain=' + d + '\', event)" class="dir-card">' +
+                        '<div style="display:flex;align-items:center;gap:0.5rem;overflow:hidden">' +
+                            '<img src="https://www.google.com/s2/favicons?domain=' + d + '&sz=32" alt="' + d + '" loading="lazy"/>' +
+                            '<span style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden">' + d + '</span>' +
+                        '</div>' +
+                        '<span style="color:var(--primary);font-size:0.75rem">&rarr;</span>' +
+                    '</a>';
                 }).join('');
-            } catch(e) {}
+
+            } catch (err) {
+                // قائمة احتياطية في حال لم تكن الملفات مرفوعة بعد
+                var samples = ['google.com', 'microsoft.com', 'apple.com', 'amazon.com', 'github.com', 'cloudflare.com', 'netflix.com', 'openai.com'];
+                grid.innerHTML = samples.map(function(d) {
+                    return '<a href="/?domain=' + d + '" onclick="navRoute(\'/?domain=' + d + '\', event)" class="dir-card">' +
+                        '<div style="display:flex;align-items:center;gap:0.5rem">' +
+                            '<img src="https://www.google.com/s2/favicons?domain=' + d + '&sz=32" alt="' + d + '"/>' +
+                            '<span>' + d + '</span>' +
+                        '</div>' +
+                        '<span style="color:var(--primary)">&rarr;</span>' +
+                    '</a>';
+                }).join('');
+            }
         }
 
-        function quickNav(d, e) {
-            if (e) e.preventDefault();
-            window.history.pushState({}, '', '/?domain=' + d);
-            init();
-        }
-
-        function renderPopular() {
-            var grid = document.getElementById('popularGrid');
-            if (!grid) return;
-            var domains = ['microsoft.com', 'google.com', 'apple.com', 'github.com', 'amazon.com', 'cloudflare.com'];
-            grid.innerHTML = domains.map(function(d) {
-                return '<a href="/?domain=' + d + '" onclick="quickNav(\'' + d + '\', event)" class="pop-card"><span>' + d + '</span></a>';
+        function renderFeatured() {
+            var grid = document.getElementById('featuredGrid');
+            var top = ['google.com', 'microsoft.com', 'apple.com', 'github.com', 'amazon.com', 'cloudflare.com', 'netflix.com', 'openai.com'];
+            grid.innerHTML = top.map(function(d) {
+                return '<a href="/?domain=' + d + '" onclick="navRoute(\'/?domain=' + d + '\', event)" class="dir-card">' +
+                    '<div style="display:flex;align-items:center;gap:0.5rem">' +
+                        '<img src="https://www.google.com/s2/favicons?domain=' + d + '&sz=32" alt="' + d + '"/>' +
+                        '<span>' + d + '</span>' +
+                    '</div>' +
+                    '<span style="color:var(--primary);font-size:0.8rem">Inspect</span>' +
+                '</a>';
             }).join('');
         }
 
         async function runAudit(domain) {
-            renderRelated(domain);
             fetchDNS(domain);
-
             var ip = "N/A", reg = "Privacy Protected", age = "N/A", cDate = "N/A", eDate = "N/A", ns = "N/A", loc = "Global";
 
             try {
-                var dnsPromise = fetch('https://dns.google/resolve?name=' + domain).then(function(r) { return r.json(); }).catch(function() { return null; });
-                var rdapPromise = fetch('https://rdap.org/domain/' + domain).then(function(r) { return r.json(); }).catch(function() { return null; });
-
+                var dnsPromise = fetch('https://dns.google/resolve?name=' + domain).then(function(r){ return r.json(); }).catch(function(){ return null; });
+                var rdapPromise = fetch('https://rdap.org/domain/' + domain).then(function(r){ return r.json(); }).catch(function(){ return null; });
                 var results = await Promise.all([dnsPromise, rdapPromise]);
-                var dnsRes = results[0];
-                var rdapRes = results[1];
+                var dnsRes = results[0], rdapRes = results[1];
 
                 if (dnsRes && dnsRes.Answer) {
-                    var aRec = dnsRes.Answer.find(function(a) { return a.type === 1; });
+                    var aRec = dnsRes.Answer.find(function(a){ return a.type === 1; });
                     if (aRec) ip = aRec.data;
                 }
 
                 if (rdapRes) {
                     if (rdapRes.entities) {
-                        var regEntity = rdapRes.entities.find(function(e) { return e.roles && e.roles.includes('registrar'); });
+                        var regEntity = rdapRes.entities.find(function(e){ return e.roles && e.roles.includes('registrar'); });
                         if (regEntity && regEntity.vcardArray && regEntity.vcardArray[1]) {
-                            var fn = regEntity.vcardArray[1].find(function(v) { return v[0] === 'fn'; });
+                            var fn = regEntity.vcardArray[1].find(function(v){ return v[0] === 'fn'; });
                             if (fn) reg = fn[3];
                         }
                     }
                     if (rdapRes.events) {
-                        var cr = rdapRes.events.find(function(ev) { return ev.eventAction === 'registration'; });
+                        var cr = rdapRes.events.find(function(ev){ return ev.eventAction === 'registration'; });
                         if (cr) {
                             var cd = new Date(cr.eventDate);
                             cDate = cd.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
                             var diff = new Date().getFullYear() - cd.getFullYear();
                             age = diff > 0 ? (diff + " Years") : "Active";
                         }
-                        var ex = rdapRes.events.find(function(ev) { return ev.eventAction === 'expiration'; });
+                        var ex = rdapRes.events.find(function(ev){ return ev.eventAction === 'expiration'; });
                         if (ex) eDate = new Date(ex.eventDate).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
                     }
-                    if (rdapRes.nameservers && rdapRes.nameservers.length > 0) {
-                        ns = rdapRes.nameservers[0].ldhName || "N/A";
-                    }
+                    if (rdapRes.nameservers && rdapRes.nameservers.length > 0) ns = rdapRes.nameservers[0].ldhName || "N/A";
                 }
 
                 if (ip !== "N/A") {
-                    var locRes = await fetch('https://ipapi.co/' + ip + '/json/').then(function(r) { return r.json(); }).catch(function() { return null; });
+                    var locRes = await fetch('https://ipapi.co/' + ip + '/json/').then(function(r){ return r.json(); }).catch(function(){ return null; });
                     if (locRes && locRes.country_name) loc = locRes.country_name;
                 }
             } catch(e) {}
 
             var worth = "$" + Math.floor((domain.length * 850) + 2450).toLocaleString();
-
-            document.getElementById('ipVal').innerHTML = ip !== 'N/A' ? (ip + ' <button class="copy-btn" onclick="copyText(\'' + ip + '\')">Copy</button>') : 'N/A';
+            document.getElementById('ipVal').textContent = ip;
             document.getElementById('ageVal').textContent = age;
             document.getElementById('locVal').textContent = loc;
             document.getElementById('worthVal').textContent = worth;
@@ -416,14 +421,6 @@
             document.getElementById('cDate').textContent = cDate;
             document.getElementById('eDate').textContent = eDate;
             document.getElementById('nsVal').textContent = ns;
-
-            document.getElementById('articleBody').innerHTML = 
-                '<h2>Technical Infrastructure &amp; Asset Valuation</h2>' +
-                '<p>A complete technical audit was executed for <strong>' + domain + '</strong>. The domain is registered through <strong>' + reg + '</strong> with an estimated active age of <strong>' + age + '</strong>.</p>' +
-                '<h3>Network Routing &amp; Host</h3>' +
-                '<p>The domain resolves to host IP <code>' + ip + '</code> located in <strong>' + loc + '</strong>, routing traffic via nameserver <code>' + ns + '</code>.</p>' +
-                '<h3>Market Valuation</h3>' +
-                '<p>Our valuation algorithm estimates the market value of <strong>' + domain + '</strong> at <strong>' + worth + '</strong> based on TLD stability, DNS security, and infrastructure reliability.</p>';
         }
 
         async function fetchDNS(domain) {
@@ -432,10 +429,10 @@
                 var types = [{ t: 'A', id: 1 }, { t: 'MX', id: 15 }, { t: 'TXT', id: 16 }, { t: 'NS', id: 2 }];
                 var rows = '';
                 for (var i = 0; i < types.length; i++) {
-                    var res = await fetch('https://dns.google/resolve?name=' + domain + '&type=' + types[i].id).then(function(r) { return r.json(); }).catch(function() { return null; });
+                    var res = await fetch('https://dns.google/resolve?name=' + domain + '&type=' + types[i].id).then(function(r){ return r.json(); }).catch(function(){ return null; });
                     if (res && res.Answer) {
-                        res.Answer.forEach(function(a) {
-                            rows += '<tr><td><strong>' + types[i].t + '</strong></td><td style="font-family:monospace;word-break:break-all">' + a.data + '</td><td>' + a.TTL + 's</td></tr>';
+                        res.Answer.forEach(function(a){
+                            rows += '<tr><td><strong>' + types[i].t + '</strong></td><td style="font-family:monospace">' + a.data + '</td><td>' + a.TTL + 's</td></tr>';
                         });
                     }
                 }
@@ -443,22 +440,6 @@
             } catch(e) {
                 tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--text-muted)">DNS lookup complete.</td></tr>';
             }
-        }
-
-        function renderRelated(domain) {
-            var box = document.getElementById('relatedBox');
-            var stem = domain.split('.')[0];
-            var tlds = ['.com', '.org', '.net', '.io', '.ai', '.co'];
-            box.innerHTML = tlds.map(function(t) {
-                var d = stem + t;
-                return '<a href="/?domain=' + d + '" onclick="quickNav(\'' + d + '\', event)" class="btn-link">' + d + '</a>';
-            }).join('');
-        }
-
-        function copyText(t) {
-            navigator.clipboard.writeText(t).then(function() {
-                alert('Copied to clipboard: ' + t);
-            }).catch(function() {});
         }
     </script>
 </body>
