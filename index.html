@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-           <script src="add.js"></script>
-
+    
     <!-- SEO Meta Tags -->
     <title>WHOIS Lookup - Free Domain Registration, DNS &amp; Valuation Intelligence</title>
     <meta name="description" content="Free online WHOIS lookup tool. Search millions of domain registration records, live DNS zone files, SSL security status, and domain market valuation.">
@@ -23,7 +22,7 @@
     <meta name="twitter:title" content="WHOIS Lookup - Free Domain &amp; DNS Intelligence">
     <meta name="twitter:description" content="Instant WHOIS lookup tool. Search domain registration details, DNS records, and server location.">
 
-    <!-- Schema.org WebSite Structured Data -->
+    <!-- Schema.org WebSite -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -38,7 +37,7 @@
     }
     </script>
 
-    <!-- Zero-Dependency Ultra-Fast Embedded CSS -->
+    <!-- Zero-Dependency Ultra-Fast CSS -->
     <style>
         :root {
             --primary: #0052ff;
@@ -48,8 +47,6 @@
             --border: #cbd5e1;
             --text: #0f172a;
             --text-muted: #475569;
-            --success-bg: #dcfce7;
-            --success-text: #166534;
             --radius: 12px;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -77,9 +74,9 @@
         .search-btn { background: var(--primary); color: #fff; border: none; padding: 0 1.75rem; border-radius: var(--radius); font-weight: 700; font-size: 1rem; cursor: pointer; transition: background 0.2s; }
         .search-btn:hover { background: var(--primary-dark); }
 
-        /* Directory Grid */
+        /* Dynamic Directory Grid */
         .section-title { font-size: 1.25rem; font-weight: 800; margin-top: 2rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
-        .dir-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 0.75rem; margin-top: 0.75rem; }
+        .dir-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 0.75rem; margin-top: 0.75rem; min-height: 120px; }
         .dir-card { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.9rem; transition: all 0.2s; }
         .dir-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,82,255,0.08); }
         .dir-card-left { display: flex; align-items: center; gap: 0.6rem; overflow: hidden; }
@@ -87,13 +84,12 @@
         .dir-card span { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
         .arrow { color: var(--primary); font-size: 0.8rem; }
 
-        /* Feature Cards */
+        /* Features & Content */
         .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 2.5rem; }
         .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
         .feature-card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem; }
         .feature-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
 
-        /* SEO Content */
         .seo-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-top: 2rem; }
         .seo-box h2 { font-size: 1.25rem; font-weight: 800; margin-bottom: 0.75rem; }
         .seo-box p { font-size: 0.9rem; color: #334155; margin-bottom: 0.75rem; }
@@ -133,84 +129,17 @@
     <!-- Main Container -->
     <main class="container">
 
-        <!-- Popular / Featured Domains Directory -->
+        <!-- Auto-Loaded Featured Domains from /domain folder -->
         <div class="section-title">
             <span>Featured Domain Records</span>
-            <span style="font-size:0.8rem;color:var(--text-muted);font-weight:600">Direct Static HTML</span>
+            <span id="loaderStatus" style="font-size:0.8rem;color:var(--text-muted);font-weight:600">Auto-loaded from /domain</span>
         </div>
 
-        <div class="dir-grid">
-            <a href="/domain/163-com.html" class="dir-card">
-                <div class="dir-card-left">
-                    <img src="https://www.google.com/s2/favicons?domain=163.com&sz=32" alt="163.com" loading="lazy"/>
-                    <span>163.com</span>
-                </div>
-                <span class="arrow">&rarr;</span>
-            </a>
-
-            <a href="/domain/google-com.html" class="dir-card">
-                <div class="dir-card-left">
-                    <img src="https://www.google.com/s2/favicons?domain=google.com&sz=32" alt="google.com" loading="lazy"/>
-                    <span>google.com</span>
-                </div>
-                <span class="arrow">&rarr;</span>
-            </a>
-
-            <a href="/domain/microsoft-com.html" class="dir-card">
-                <div class="dir-card-left">
-                    <img src="https://www.google.com/s2/favicons?domain=microsoft.com&sz=32" alt="microsoft.com" loading="lazy"/>
-                    <span>microsoft.com</span>
-                </div>
-                <span class="arrow">&rarr;</span>
-            </a>
-
-            <a href="/domain/apple-com.html" class="dir-card">
-                <div class="dir-card-left">
-                    <img src="https://www.google.com/s2/favicons?domain=apple.com&sz=32" alt="apple.com" loading="lazy"/>
-                    <span>apple.com</span>
-                </div>
-                <span class="arrow">&rarr;</span>
-            </a>
-
-            <a href="/domain/github-com.html" class="dir-card">
-                <div class="dir-card-left">
-                    <img src="https://www.google.com/s2/favicons?domain=github.com&sz=32" alt="github.com" loading="lazy"/>
-                    <span>github.com</span>
-                </div>
-                <span class="arrow">&rarr;</span>
-            </a>
-
-            <a href="/domain/amazon-com.html" class="dir-card">
-                <div class="dir-card-left">
-                    <img src="https://www.google.com/s2/favicons?domain=amazon.com&sz=32" alt="amazon.com" loading="lazy"/>
-                    <span>amazon.com</span>
-                </div>
-                <span class="arrow">&rarr;</span>
-            </a>
-
-            <a href="/domain/cloudflare-com.html" class="dir-card">
-                <div class="dir-card-left">
-                    <img src="https://www.google.com/s2/favicons?domain=cloudflare.com&sz=32" alt="cloudflare.com" loading="lazy"/>
-                    <span>cloudflare.com</span>
-                </div>
-                <span class="arrow">&rarr;</span>
-            </a>
-
-            <a href="/domain/netflix-com.html" class="dir-card">
-                <div class="dir-card-left">
-                    <img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=32" alt="netflix.com" loading="lazy"/>
-                    <span>netflix.com</span>
-                </div>
-                <span class="arrow">&rarr;</span>
-            </a>
-
-            <a href="/domain/openai-com.html" class="dir-card">
-                <div class="dir-card-left">
-                    <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" alt="openai.com" loading="lazy"/>
-                    <span>openai.com</span>
-                </div>
-                <span class="arrow">&rarr;</span>
-            </a>
+        <!-- سيتم تعبئة هذه الشبكة تلقائياً بالملفات الموجودة في مجلد domain -->
+        <div class="dir-grid" id="autoDomainsGrid">
+            <div style="grid-column: 1/-1; text-align:center; padding: 2rem; color:var(--text-muted)">
+                Loading domain files from /domain directory...
+            </div>
         </div>
 
         <!-- Features Grid -->
@@ -240,11 +169,10 @@
             </div>
         </div>
 
-        <!-- Rich SEO Content Box -->
+        <!-- SEO Box -->
         <div class="seo-box">
             <h2>About WHOIS Lookup &amp; Domain Intelligence</h2>
-            <p>WHOIS is a standardized query protocol used extensively to query databases that store the registered users or assignees of an Internet resource, such as a domain name or an IP address block.</p>
-            <p>Our platform provides direct, static-rendered intelligence reports for millions of registered top-level domains (.com, .org, .net, .io, .ai), enabling webmasters, cybersecurity researchers, and domain investors to perform deep domain investigations with zero latency.</p>
+            <p>Our platform provides direct, static-rendered intelligence reports for millions of registered top-level domains (.com, .org, .net, .io, .ai), enabling webmasters, cybersecurity researchers, and domain investors to perform deep investigations with zero latency.</p>
         </div>
 
     </main>
@@ -254,25 +182,108 @@
         <p>&copy; <span id="year"></span> WHOIS Lookup Platform. All records verified via standardized registry protocols.</p>
     </footer>
 
-    <!-- Smart Redirect Search Controller -->
+    <!-- Smart Auto-Directory Loader & Search Script -->
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
+        // 1. معالجة البحث وتحويله لـ /domain/name-tld.html
         function handleSearch(e) {
             e.preventDefault();
             var val = document.getElementById('domainInput').value.trim().toLowerCase();
-            
-            // تنظيف الرابط من البروتوكولات والمسارات
             val = val.replace(/^(https?:\/\/)?(www\.)?/, '').split('/')[0].split('?')[0];
 
             if (val && val.includes('.')) {
-                // تحويل الدومين مثل 163.com إلى صيغة /domain/163-com.html
                 var slug = val.replace(/\./g, '-') + '.html';
                 window.location.href = '/domain/' + slug;
             } else {
                 alert('Please enter a valid domain name (e.g. 163.com or google.com)');
             }
         }
+
+        // 2. سحب ملفات مجلد domain تلقائياً
+        async function loadDomainsFromFolder() {
+            var grid = document.getElementById('autoDomainsGrid');
+            var status = document.getElementById('loaderStatus');
+
+            // محاولة قراءة البيانات من الكاش لتسريع الفتح
+            var cached = localStorage.getItem('cached_domain_files');
+            if (cached) {
+                try {
+                    renderCards(JSON.parse(cached));
+                } catch(e) {}
+            }
+
+            try {
+                // استخراج اسم المستودع والمستخدم تلقائياً من الرابط
+                // https://whois-lookup.github.io -> user: whois-lookup, repo: whois-lookup.github.io
+                var hostParts = window.location.hostname.split('.');
+                var user = hostParts[0];
+                var repo = window.location.hostname;
+
+                var apiUrl = `https://api.github.com/repos/${user}/${repo}/contents/domain`;
+
+                var res = await fetch(apiUrl);
+                if (!res.ok) throw new Error('API limit or folder not accessible');
+
+                var files = await res.json();
+
+                // فلترة الملفات التي تنتهي بـ .html فقط
+                var htmlFiles = files
+                    .filter(f => f.name.endsWith('.html'))
+                    .map(f => f.name);
+
+                if (htmlFiles.length > 0) {
+                    // حفظها في الكاش لتسريع الزيارات القادمة
+                    localStorage.setItem('cached_domain_files', JSON.stringify(htmlFiles));
+                    renderCards(htmlFiles);
+                    status.textContent = `${htmlFiles.length} records indexed`;
+                } else {
+                    throw new Error('No html files found');
+                }
+
+            } catch (err) {
+                // في حال عدم توفر الـ API أو وجود Rate Limit، يتم استخدام القائمة الافتراضية
+                var fallback = [
+                    '163-com.html', 'google-com.html', 'microsoft-com.html', 
+                    'apple-com.html', 'github-com.html', 'amazon-com.html', 
+                    'cloudflare-com.html', 'netflix-com.html', 'openai-com.html'
+                ];
+                renderCards(fallback);
+                status.textContent = 'Live Registry Files';
+            }
+        }
+
+        // 3. تحويل اسم الملف (163-com.html) إلى نطاق (163.com) وعرضه
+        function renderCards(filesList) {
+            var grid = document.getElementById('autoDomainsGrid');
+            if (!grid) return;
+
+            // خلط الملفات واختيار حتى 18 ملف عشوائي
+            var shuffled = [...filesList].sort(() => 0.5 - Math.random()).slice(0, 18);
+
+            grid.innerHTML = shuffled.map(fileName => {
+                // تحويل الاسم: 163-com.html -> 163.com
+                var nameWithoutExt = fileName.replace('.html', '');
+                var lastHyphen = nameWithoutExt.lastIndexOf('-');
+                
+                var realDomain = lastHyphen !== -1 
+                    ? nameWithoutExt.substring(0, lastHyphen) + '.' + nameWithoutExt.substring(lastHyphen + 1)
+                    : nameWithoutExt;
+
+                return `
+                    <a href="/domain/${fileName}" class="dir-card">
+                        <div class="dir-card-left">
+                            <img src="https://www.google.com/s2/favicons?domain=${realDomain}&sz=32" alt="${realDomain}" loading="lazy"/>
+                            <span>${realDomain}</span>
+                        </div>
+                        <span class="arrow">&rarr;</span>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        // تشغيل الجلب التلقائي بمجرد فتح الصفحة
+        window.addEventListener('DOMContentLoaded', loadDomainsFromFolder);
     </script>
 </body>
 </html>
