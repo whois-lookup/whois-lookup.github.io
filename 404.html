@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 1. كود فوري في أول سطر لضبط الـ Title والـ Meta من الرابط مباشرة -->
+    <script>
+        (function() {
+            var path = window.location.pathname;
+            var domain = '';
+            
+            // استخراج اسم الدومين من المسار /domain/xxx.com
+            if (path.indexOf('/domain/') !== -1) {
+                domain = path.split('/domain/')[1].replace(/\/+$/, '');
+            } else {
+                var params = new URLSearchParams(window.location.search);
+                domain = params.get('q') || params.get('d');
+            }
+
+            if (domain) {
+                domain = domain.toLowerCase().trim();
+                
+                // العنوان المحسوب للسيو بدقة
+                var titleText = domain + " WHOIS Lookup & DNS Records [Full Audit]";
+                document.title = titleText;
+
+                // الوصف المحسوب للسيو بدقة
+                var descText = "Get live " + domain + " WHOIS data, active DNS lookup, and domain review. Check hosting provider, nameservers, SPF email security, and SSL health status.";
+
+                // حقن الوسوم فوراً
+                var metaDesc = document.createElement('meta');
+                metaDesc.name = "description";
+                metaDesc.content = descText;
+                document.head.appendChild(metaDesc);
+
+                // Open Graph لشبكات التواصل ومحركات البحث
+                var ogTitle = document.createElement('meta');
+                ogTitle.setAttribute('property', 'og:title');
+                ogTitle.content = titleText;
+                document.head.appendChild(ogTitle);
+
+                var ogDesc = document.createElement('meta');
+                ogDesc.setAttribute('property', 'og:description');
+                ogDesc.content = descText;
+                document.head.appendChild(ogDesc);
+
+                window.CURRENT_DOMAIN = domain;
+            }
+        })();
+    </script>
+
+    <title>WHOIS Lookup & DNS Records</title>
+    <link rel="preconnect" href="https://dns.google">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root { --primary: #2563eb; --bg: #0f172a; --card: #1e293b; --border: #334155; --text: #f8fafc; --text-muted: #94a3b8; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 2rem 1rem; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        h1 { font-size: 1.5rem; color: #38bdf8; margin: 0 0 0.5rem; }
+        p { color: var(--text-muted); font-size: 0.95rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+        th, td { text-align: left; padding: 0.75rem; border-bottom: 1px solid var(--border); }
+        th { color: var(--text-muted); }
+        .badge { background: rgba(37,99,235,0.2); color: #60a5fa; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h1 id="domainHeading">Loading Audit...</h1>
+        <p id="domainDesc">Auditing authoritative DNS servers, lifecycle and security status...</p>
+    </div>
+
+    <div class="card">
+        <h3>Live DNS Zone Records</h3>
+        <table>
+            <thead>
+                <tr><th>Type</th><th>Record Data</th><th>TTL</th></tr>
+            </thead>
+            <tbody id="dnsResults">
+                <tr><td colspan="3">Querying DNS roots...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var domain = window.CURRENT_DOMAIN;
+        if (!domain) {
+            window.location.href = '/';
+            return;
+        }
+
+        document.getElementById('domainHeading').textContent = domain + " Audit Report";
+        document.getElementById('domainDesc').textContent = "Get live " + domain + " WHOIS data, active DNS lookup, and domain review.";
+
+        // استدعاء الـ DNS من Google API مباشرة من متصفح الزائر
+        var types = ['A', 'AAAA', 'MX', 'NS', 'TXT'];
+        var tbody = document.getElementById('dnsResults');
+        tbody.innerHTML = '';
+
+        types.forEach(function(t) {
+            fetch('https://dns.google/resolve?name=' + domain + '&type=' + t)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.Answer) {
+                    data.Answer.forEach(function(ans) {
+                        tbody.innerHTML += '<tr><td><span class="badge">' + t + '</span></td><td style="font-family:monospace;">' + ans.data + '</td><td>' + ans.TTL + 's</td></tr>';
+                    });
+                }
+            }).catch(function(){});
+        });
+    });
+</script>
+</body>
+</html>
