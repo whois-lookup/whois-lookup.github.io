@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 1. SEO Title & Meta Description (أطوال قياسية متوافقة 100% مع محركات البحث) -->
+    <title>WHOIS Lookup &amp; DNS Records Tool - Free Domain Audit</title>
+    <meta name="description" content="Free online WHOIS lookup and active DNS records tool. Check authoritative registrar details, nameservers, MX records, and SSL health score instantly.">
+    <link rel="canonical" href="https://whois-lookup.github.io/">
+
+    <!-- 2. Open Graph & Social Cards -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="WHOIS Lookup &amp; DNS Records Tool - Free Domain Audit">
+    <meta property="og:description" content="Instant domain technical review: Authoritative WHOIS, live DNS zone lookup, and SSL security reports.">
+    <meta property="og:url" content="https://whois-lookup.github.io/">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- 3. Preconnect & Modern Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- 4. Schema.org JSON-LD (SearchAction + WebApplication + FAQ) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "url": "https://whois-lookup.github.io/",
+          "name": "WHOIS Lookup Engine",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://whois-lookup.github.io/domain/{search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "WebApplication",
+          "name": "WHOIS & DNS Security Inspector",
+          "applicationCategory": "UtilitiesApplication",
+          "operatingSystem": "All",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --border: #334155;
+            --text-main: #f8fafc;
+            --text-sec: #94a3b8;
+            --radius: 14px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: var(--bg); color: var(--text-main); line-height: 1.6; }
+        .container { max-width: 1050px; margin: 0 auto; padding: 0 1.25rem; }
+
+        /* Navbar */
+        .navbar { padding: 1.25rem 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .brand { font-size: 1.3rem; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        .brand span { color: #38bdf8; }
+
+        /* Hero Section */
+        .hero { text-align: center; padding: 4.5rem 0 3rem; }
+        .hero h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 1rem; }
+        .hero p { color: var(--text-sec); font-size: 1.1rem; max-width: 650px; margin: 0 auto 2.5rem; }
+
+        /* Search Box */
+        .search-box { max-width: 650px; margin: 0 auto; background: var(--card); border: 2px solid var(--border); border-radius: 50px; padding: 0.4rem 0.4rem 0.4rem 1.2rem; display: flex; align-items: center; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4); }
+        .search-box:focus-within { border-color: var(--primary); }
+        .search-input { width: 100%; background: transparent; border: none; outline: none; color: #fff; font-size: 1rem; font-weight: 600; }
+        .search-btn { background: var(--primary); color: #fff; border: none; padding: 0.85rem 1.85rem; border-radius: 50px; font-weight: 700; cursor: pointer; transition: background 0.2s; white-space: nowrap; font-size: 0.95rem; }
+        .search-btn:hover { background: var(--primary-hover); }
+
+        /* Quick Trending Domains (Internal Linking for SEO Crawlers) */
+        .trending-box { margin-top: 2rem; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 0.6rem; }
+        .trending-label { font-size: 0.85rem; color: var(--text-sec); font-weight: 600; }
+        .domain-tag { background: var(--card); border: 1px solid var(--border); color: #38bdf8; text-decoration: none; padding: 0.35rem 0.85rem; border-radius: 50px; font-size: 0.82rem; font-weight: 600; transition: all 0.2s; }
+        .domain-tag:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        /* Features */
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.25rem; margin: 4rem 0; }
+        .feature-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; text-align: center; }
+        .feature-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .feature-card p { font-size: 0.85rem; color: var(--text-sec); }
+
+        /* Footer */
+        footer { border-top: 1px solid var(--border); padding: 2.5rem 0; text-align: center; color: var(--text-sec); font-size: 0.85rem; margin-top: 4rem; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="navbar">
+            <a href="/" class="brand">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                WHOIS<span>AUDIT</span>
+            </a>
+        </header>
+
+        <!-- Hero & Search -->
+        <section class="hero">
+            <h1>WHOIS Lookup &amp; Technical Domain Audit</h1>
+            <p>Inspect authoritative registrar records, live Anycast DNS zones, SPF/DMARC email security, and SSL health in real time.</p>
+
+            <form class="search-box" onsubmit="executeSearch(event)">
+                <input type="text" id="targetDomainInput" class="search-input" placeholder="Enter domain name (e.g. wallpapercave.com)..." required autocomplete="off" spellcheck="false">
+                <button type="submit" class="search-btn">Run Lookup</button>
+            </form>
+
+            <!-- روابط داخلية تفيد عناكب البحث وأرشفة الصفحات -->
+            <div class="trending-box">
+                <span class="trending-label">Popular Audits:</span>
+                <a href="/domain/wallpapercave.com" class="domain-tag">wallpapercave.com</a>
+                <a href="/domain/google.com" class="domain-tag">google.com</a>
+                <a href="/domain/github.com" class="domain-tag">github.com</a>
+                <a href="/domain/cloudflare.com" class="domain-tag">cloudflare.com</a>
+                <a href="/domain/wikipedia.org" class="domain-tag">wikipedia.org</a>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section class="features-grid">
+            <div class="feature-card">
+                <h3>Authoritative WHOIS</h3>
+                <p>Verify registration metadata, creation and expiry dates, and registrar lifecycle status.</p>
+            </div>
+            <div class="feature-card">
+                <h3>DNS Zone Records</h3>
+                <p>Resolve authoritative A, AAAA, MX, NS, and TXT records directly via root DNS servers.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Email Authentication</h3>
+                <p>Audit SPF (Sender Policy Framework) and DMARC enforcement records to prevent domain spoofing.</p>
+            </div>
+            <div class="feature-card">
+                <h3>SSL &amp; Security Status</h3>
+                <p>Instant verification of HTTPS encryption protocols and live server IP reachability.</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; <script>document.write(new Date().getFullYear())</script> WHOIS Lookup &amp; Domain Intelligence Engine. Hosted on GitHub Pages.</p>
+        </footer>
+    </div>
+
+    <!-- Script to handle Clean Domain routing -->
+    <script>
+        function cleanDomain(input) {
+            if (!input) return '';
+            return input.trim().toLowerCase()
+                .replace(/^(?:https?:\/\/)?(?:www\.)?/i, '')
+                .split('/')[0]
+                .split('?')[0]
+                .replace(/[^a-z0-9.-]/gi, '')
+                .replace(/^[.-]+|[.-]+$/g, '');
+        }
+
+        function executeSearch(e) {
+            if (e) e.preventDefault();
+            const inputEl = document.getElementById('targetDomainInput');
+            const domain = cleanDomain(inputEl.value);
+            if (domain) {
+                // التحويل التلقائي المباشر لمسار الدومين الذي سيعالجه ملف 404.html فوراً
+                window.location.href = '/domain/' + domain;
+            }
+        }
+
+        // إذا وصل الزائر عبر رابط قديم مثل ?q=example.com، يتم تحويله لمسار /domain/example.com
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const query = params.get('q') || params.get('d');
+            if (query) {
+                const domain = cleanDomain(query);
+                if (domain) {
+                    window.location.replace('/domain/' + domain);
+                }
+            }
+        })();
+    </script>
+</body>
+</html>
